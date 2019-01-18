@@ -80,7 +80,8 @@ MonoBehaviour:
   atkRate: 0.1
   atkPoint: 1
   iHp: 1
-  currentStatus: 0
+  knockDistance: 5
+  knockSpeed: -5
 --- !u!212 &212353963088017374
 SpriteRenderer:
   m_ObjectHideFlags: 1

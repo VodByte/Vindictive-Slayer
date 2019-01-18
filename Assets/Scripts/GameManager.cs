@@ -26,9 +26,10 @@ public class GameManager : MonoBehaviour
     {
         // 敵を配置する。このやり方は雑なので、後は別の方法でやる
         cm = GetComponent<CharaManager>();
-        cm.CreateChara(new Vector2(-5.741f, -2.632f), CharaManager.CharaType.Player);
 
-        cm.CreateChara(new Vector2(5.1f, -3.86f), CharaManager.CharaType.Enemy2);
+        cm.CreateChara(new Vector2(-5.741f, -2.632f), CharaManager.CharaType.Player);
+        cm.CreateChara(new Vector2(5.1f, -3.86f), CharaManager.CharaType.Enemy1);
+        cm.CreateChara(new Vector2(-11f, -2.87f), CharaManager.CharaType.Club);
 
         //cm.CreateChara(new Vector2(10.1f, -2.46f), CharaManager.CharaType.Enemy0);
         //cm.CreateChara(new Vector2(10.1f + 2.5f, -2.46f), CharaManager.CharaType.Enemy0);

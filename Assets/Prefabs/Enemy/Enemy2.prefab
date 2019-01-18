@@ -49,7 +49,7 @@ Animator:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1997682273967350}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 7d31f7533301f354896ea3af9e0ab468, type: 2}
   m_CullingMode: 0
@@ -80,7 +80,11 @@ MonoBehaviour:
   atkRate: 2
   atkPoint: 2
   iHp: 5
-  currentStatus: 0
+  knockDistance: 3
+  knockSpeed: -4
+  knockUpHeight: 1
+  knockUpSpeed: 4
+  club: {fileID: 1013377793175784, guid: 4561a4a871b9141aeadad48f9db80eea, type: 2}
 --- !u!212 &212383695513502120
 SpriteRenderer:
   m_ObjectHideFlags: 1

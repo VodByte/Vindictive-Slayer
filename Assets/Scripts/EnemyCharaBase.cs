@@ -13,14 +13,14 @@ using UnityEngine;
 
 public abstract class EnemyCharaBase : MonoBehaviour
 {
-	//------------------------------------------
-	//変数宣言(Public)
-	//------------------------------------------
-	[HideInInspector]
-	public Vector2 position;			// 敵の座標
+    //------------------------------------------
+    //変数宣言(Public)
+    //------------------------------------------
+    [HideInInspector]
+    public Vector2 position;			// 敵の座標
     public GameObject hitEffect;		// 当たられたエフェクトのPrefab
     public GameObject deadEffect;       // 死亡エフェクトのPrefab
-	public float moveSpeed;             // 右からくる速度(0.１に設定するのを推薦)
+    public float moveSpeed;             // 右からくる速度(0.１に設定するのを推薦)
     public float RigorTime = 2.0f;		// 硬直時間（当たられたアニメーションがあったら、アニメーションの長さに応じて設定する）
     public float atkRange;              // 敵攻撃距離
     [HideInInspector]
@@ -28,23 +28,38 @@ public abstract class EnemyCharaBase : MonoBehaviour
     public float atkRate = 0.1f;        // 敵の攻撃頻度
     public int atkPoint = 1;			// 敵の攻撃力
     public int iHp;                     // 敵HP（使えない敵もいる）
-	// 敵の状態
+    // 敵の状態
     public enum EnemyStatus
     {
         normal,
         beAttacked,
+        beKnocked,
         dead
     }
-    public EnemyStatus currentStatus = EnemyStatus.normal;       // 敵今の状態は
+    protected EnemyStatus currentStatus = EnemyStatus.normal;       // 敵今の状態は
+    public EnemyStatus CurrentStatus
+    {
+        get
+        {
+            return currentStatus;
+        }
+    }
 
-	//------------------------------------------
-	//変数宣言(Private/Protected)
-	//------------------------------------------
-	protected Animator ani;
+    //------------------------------------------
+    //変数宣言(Private/Protected)
+    //------------------------------------------
+    protected Animator ani;
     private float currentSpeed;				// 今使っている速度
     private float rigorTimer = 0.0f;		// タイマー、硬直状態の時間を
-	private float deadSpeed = GameInfo.ScrollSpeed;     // 死亡したら、死体の移動速度
+    private float deadSpeed = GameInfo.ScrollSpeed;     // 死亡したら、死体の移動速度
     private float atkTimer = 0.0f;
+    [SerializeField] private float knockDistance = 0.0f;  // be knocked out Distance
+    [SerializeField] private float knockSpeed = 0.0f;    // be knocked speed;
+    private float knockUpTravel = 0.0f;
+    [SerializeField] private float knockUpHeight = 1.0f;
+    [SerializeField] private float knockUpSpeed = 2.0f;
+
+    private float knockTraveled = 0.0f;  // knock out traveled distance
 
     //-------------------------------------------------
     // 初期化処理
@@ -76,14 +91,8 @@ public abstract class EnemyCharaBase : MonoBehaviour
             isAtkReady = true;
         }
 
-        // 画面の左側から5.0の距離を離したら、Delete
-        if (transform.position.x < GameInfo.ScreenViewLeftEdgePos.x - 5.0f)
-        {
-            Destroy(gameObject);
-        }
-
 		// 状態に応じて処理を行う
-        switch (currentStatus)
+        switch (CurrentStatus)
         {
 			// 使われた速度は 敵自身の速度 + 画面移動の速度
             case EnemyStatus.normal:
@@ -99,7 +108,25 @@ public abstract class EnemyCharaBase : MonoBehaviour
                     currentStatus = EnemyStatus.normal;
                 }
                 break;
-			// 死亡、死亡アニメーションを再生
+            // knockoutされた場合
+            case EnemyStatus.beKnocked:
+                currentSpeed = knockSpeed;
+
+                // Y軸移動処理
+                if (knockUpTravel <= Mathf.PI && knockUpTravel >= 0)
+                {
+                    knockUpTravel += Time.deltaTime * knockUpSpeed;
+                }
+                transform.position = new Vector2(transform.position.x, -3.86f + Mathf.Sin(knockUpTravel) * knockUpHeight);
+
+                knockTraveled += (-knockSpeed) * Time.deltaTime;
+                Debug.Log(knockTraveled);
+                if(knockTraveled >= knockDistance)
+                {
+                    currentStatus = EnemyStatus.dead;
+                }
+                break;
+            // 死亡、死亡アニメーションを再生
             case EnemyStatus.dead:
                 ani.SetBool("isDead", true);
                 currentSpeed = deadSpeed;
@@ -124,6 +151,14 @@ public abstract class EnemyCharaBase : MonoBehaviour
     }
 
     //---------------------------------------------------------------
+    // 敵がknockoutされたら
+    //---------------------------------------------------------------
+    public void SetKnockout()
+    {
+        currentStatus = EnemyStatus.beKnocked;
+    }
+
+    //---------------------------------------------------------------
     // 敵の死亡エフェクトを生成する（生成したから1.2秒の後でDelete）
     //---------------------------------------------------------------
     protected void SetDeadAni()
@@ -134,7 +169,7 @@ public abstract class EnemyCharaBase : MonoBehaviour
 	// 一回だけ行う、攻撃する時
 	protected void SetAtkAni()
     {
-		// 敵の攻撃アニメーションを再生する
+        // 敵の攻撃アニメーションを再生する
         ani.SetTrigger("atk");
 	}
 

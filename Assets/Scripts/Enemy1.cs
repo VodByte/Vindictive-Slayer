@@ -36,12 +36,12 @@ public class Enemy1 : EnemyCharaBase
             --iHp;
             if (iHp > 0)
             {
-                currentStatus = EnemyStatus.beAttacked;
+                CurrentStatus = EnemyStatus.beAttacked;
                 SetBeAtkAni();
             }
             else
             {
-                currentStatus = EnemyStatus.dead;
+                CurrentStatus = EnemyStatus.dead;
                 SetDeadAni();
             }
         }

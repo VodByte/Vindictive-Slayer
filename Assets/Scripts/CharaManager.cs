@@ -23,6 +23,7 @@ public class CharaManager : MonoBehaviour
     public enum CharaType
     {
         Player,
+        Club,
         Enemy0,
         Enemy1,
         Enemy2
@@ -33,36 +34,100 @@ public class CharaManager : MonoBehaviour
     //------------------------------------------
     private List<EnemyCharaBase> enemyList = new List<EnemyCharaBase> { };  // ゲーム内いる敵を全部格納用List
     private List<int> playerCanAtkEnemyList = new List<int> { };            // そのListの中に、プレイヤーが攻撃可能の敵の要素番号を格納用List
+    private List<int> clubAtkList = new List<int> { };
 
     //-------------------------------------------------------------
     // 更新
     //-------------------------------------------------------------
     void Update()
     {
+        // listの更新
+        UpdateList();
+
+        // 敵がプレイヤーを攻撃できるなら、攻撃を行う
+        HandleEnemyAtkPlayer();
+
+        // プレイヤーが敵を攻撃しようとする
+        HandlePlayerAtkEnemy();
+
+        // 木棒の攻撃を行う
+        if (clubAtkList.Count != 0)
+        {
+            foreach (var i in clubAtkList)
+            {
+                enemyList[i].SetKnockout();
+            }
+        }
+    }
+
+    //---------------------------------------------------------------
+    // 概要：listの更新
+    //---------------------------------------------------------------
+    private void UpdateList()
+    {
         // 毎回Listをクリアして、判定する
         playerCanAtkEnemyList.Clear();
+        clubAtkList.Clear();
         for (int i = 0; i < enemyList.Count; i++)
         {
+            // 画面の左側から5.0の距離を離したら、Delete
+            bool isOutScreen = enemyList[i].position.x < GameInfo.ScreenViewLeftEdgePos.x - 5.0f;
+            if (isOutScreen)
+            {
+                Destroy(enemyList[i].gameObject);
+                enemyList.RemoveAt(i);
+            }
+
+            // 木棒攻撃List
+            foreach (var x in transform.GetComponentsInChildren<Club>())
+            {
+                float club2EnemyDistance = Mathf.Abs(x.pos.x - enemyList[i].position.x);
+                bool isDistanceReady = club2EnemyDistance <= x.atkRange;
+                bool isStatusReady = enemyList[i].CurrentStatus != EnemyCharaBase.EnemyStatus.dead
+                    && enemyList[i].CurrentStatus != EnemyCharaBase.EnemyStatus.beKnocked;
+
+                if (isDistanceReady && isStatusReady)
+                {
+                    clubAtkList.Add(i);
+                }
+            }
+
             // 敵とプレイヤーの距離
-            float distance = Mathf.Abs(GameInfo.PlayerInfo.pos.x - enemyList[i].position.x);
+            float enemy2playerDistance = Mathf.Abs(GameInfo.PlayerInfo.pos.x - enemyList[i].position.x);
             // その距離はプレイヤーの攻撃範囲内のか
-            bool isPlayerCanAtkEnemy = distance <= GameInfo.PlayerInfo.atkRange;
+            bool isPlayerCanAtkEnemy = enemy2playerDistance <= GameInfo.PlayerInfo.atkRange;
             // プレイヤーが攻撃できる敵の情報を格納用Listに追加
             if (isPlayerCanAtkEnemy)
             {
                 playerCanAtkEnemyList.Add(i);
             }
+        }
 
-            // 敵がプレイヤーを攻撃できるなら、攻撃を行う
-            if (CheckCanAtkPlayer(enemyList[i]))
+    }
+
+    //---------------------------------------------------------------
+    // 概要：敵がプレイヤーを攻撃できるなら、攻撃を行う
+    //---------------------------------------------------------------
+    private void HandleEnemyAtkPlayer()
+    {
+        foreach (var i in enemyList)
+        {
+            if (CheckCanAtkPlayer(i))
             {
-                enemyList[i].Attack();
-                GameInfo.PlayerInfo.BeAtked(enemyList[i].atkPoint);
+                i.Attack();
+                GameInfo.PlayerInfo.BeAtked(i.atkPoint);
                 GameInfo.PlayerInfo.PlayAudio(PlayerManager.AudioIndex.playerBeHitted);
             }
         }
+    }
 
-        // プレイヤーが敵を攻撃しようとする
+
+
+    //---------------------------------------------------------------
+    // 概要：プレイヤーが敵を攻撃しようとする
+    //---------------------------------------------------------------
+    private void HandlePlayerAtkEnemy()
+    {
         if (InputManager.currentAtkPattern != InputManager.AtkPattern.NONE)
         {
             bool isPlayerCanAtk = GameInfo.PlayerInfo.Attack();
@@ -107,7 +172,7 @@ public class CharaManager : MonoBehaviour
         bool isTouchable = distance <= enemy.atkRange;
 
         // 敵が普通の状態であるのか
-        bool isNormalStatus = enemy.currentStatus == EnemyCharaBase.EnemyStatus.normal;
+        bool isNormalStatus = enemy.CurrentStatus == EnemyCharaBase.EnemyStatus.normal;
 
         // 敵の攻撃準備ができたのか
         bool isEnemyReady = enemy.isAtkReady;
@@ -136,6 +201,10 @@ public class CharaManager : MonoBehaviour
         if (chara == CharaType.Player)
         {
             Instantiate(charaPrefabs[(int)chara], pos, Quaternion.identity);
+        }
+        else if (chara == CharaType.Club)
+        {
+            Instantiate(charaPrefabs[(int)chara], pos, Quaternion.identity, transform);
         }
         else
         {

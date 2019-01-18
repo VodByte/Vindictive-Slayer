@@ -48,7 +48,7 @@ public class Enemy2 : EnemyCharaBase
                 if (inputIndex == 1)
                 {
                     // 落ちる木棒を生成する
-                    Instantiate(club, transform.position, Quaternion.identity);
+                    Instantiate(club, transform.position, Quaternion.identity, Camera.main.transform);
                 }
             }
             else
