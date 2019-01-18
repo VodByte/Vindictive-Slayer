@@ -120,7 +120,6 @@ public abstract class EnemyCharaBase : MonoBehaviour
                 transform.position = new Vector2(transform.position.x, -3.86f + Mathf.Sin(knockUpTravel) * knockUpHeight);
 
                 knockTraveled += (-knockSpeed) * Time.deltaTime;
-                Debug.Log(knockTraveled);
                 if(knockTraveled >= knockDistance)
                 {
                     currentStatus = EnemyStatus.dead;
