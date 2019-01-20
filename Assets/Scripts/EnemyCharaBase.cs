@@ -52,8 +52,7 @@ public abstract class EnemyCharaBase : MonoBehaviour
     private float currentSpeed;				// 今使っている速度
     private float rigorTimer = 0.0f;		// タイマー、硬直状態の時間を
     private float deadSpeed = GameInfo.ScrollSpeed;     // 死亡したら、死体の移動速度
-    private float atkTimer = 0.0f;
-    [SerializeField] private float knockDistance = 0.0f;  // be knocked out Distance
+    protected float atkTimer = 0.0f;
     [SerializeField] private float knockSpeed = 0.0f;    // be knocked speed;
     private float knockUpTravel = 0.0f;
     [SerializeField] private float knockUpHeight = 1.0f;
@@ -97,6 +96,18 @@ public abstract class EnemyCharaBase : MonoBehaviour
 			// 使われた速度は 敵自身の速度 + 画面移動の速度
             case EnemyStatus.normal:
                 currentSpeed = moveSpeed + GameInfo.ScrollSpeed;
+
+                // 常に顔をプレイヤーに向ける
+                bool isFlip = true;
+                if (transform.position.x <= GameInfo.PlayerInfo.pos.x)
+                {
+                    isFlip = true;
+                }
+                else
+                {
+                    isFlip = false;
+                }
+                GetComponent<SpriteRenderer>().flipX = isFlip;
                 break;
 			// 止まり、硬直してから、普通状態に戻す
             case EnemyStatus.beAttacked:
@@ -111,38 +122,25 @@ public abstract class EnemyCharaBase : MonoBehaviour
             // knockoutされた場合
             case EnemyStatus.beKnocked:
                 currentSpeed = knockSpeed;
-
                 // Y軸移動処理
                 if (knockUpTravel <= Mathf.PI && knockUpTravel >= 0)
                 {
                     knockUpTravel += Time.deltaTime * knockUpSpeed;
                 }
-                transform.position = new Vector2(transform.position.x, -3.86f + Mathf.Sin(knockUpTravel) * knockUpHeight);
+                transform.position = new Vector2(transform.position.x, GameInfo.floorPos + Mathf.Sin(knockUpTravel) * knockUpHeight);
 
-                knockTraveled += (-knockSpeed) * Time.deltaTime;
-                if(knockTraveled >= knockDistance)
+                if (transform.position.y <= GameInfo.floorPos)
                 {
-                    currentStatus = EnemyStatus.dead;
+                   currentStatus = EnemyStatus.dead;
                 }
                 break;
             // 死亡、死亡アニメーションを再生
             case EnemyStatus.dead:
+                GetComponent<SpriteRenderer>().sortingOrder = -100;
                 ani.SetBool("isDead", true);
                 currentSpeed = deadSpeed;
                 break;
         }
-
-        // 常に顔をプレイヤーに向ける
-        bool isFlip = true;
-        if (transform.position.x <= GameInfo.PlayerInfo.pos.x)
-        {
-            isFlip = true;
-        }
-        else
-        {
-            isFlip = false;
-        }
-        GetComponent<SpriteRenderer>().flipX = isFlip;
 
         // 敵の移動と実座標の更新
         transform.Translate(Vector2.left * currentSpeed * Time.deltaTime);
@@ -152,7 +150,7 @@ public abstract class EnemyCharaBase : MonoBehaviour
     //---------------------------------------------------------------
     // 敵がknockoutされたら
     //---------------------------------------------------------------
-    public void SetKnockout()
+    public virtual void SetKnockout()
     {
         currentStatus = EnemyStatus.beKnocked;
     }
@@ -160,17 +158,10 @@ public abstract class EnemyCharaBase : MonoBehaviour
     //---------------------------------------------------------------
     // 敵の死亡エフェクトを生成する（生成したから1.2秒の後でDelete）
     //---------------------------------------------------------------
-    protected void SetDeadAni()
+    protected virtual void SetDeadAni()
     {
-        Destroy(Instantiate(deadEffect, transform.position, Quaternion.identity, gameObject.transform) as GameObject, 1.2f);
+        //Destroy(Instantiate(deadEffect, transform.position, Quaternion.identity, gameObject.transform) as GameObject, 1.2f);
     }
-
-	// 一回だけ行う、攻撃する時
-	protected void SetAtkAni()
-    {
-        // 敵の攻撃アニメーションを再生する
-        ani.SetTrigger("atk");
-	}
 
     //------------------------------------------
     // 一回だけ行う、当たられたら時
@@ -178,7 +169,7 @@ public abstract class EnemyCharaBase : MonoBehaviour
     protected virtual void SetBeAtkAni()
     {
 		// 当たったエフェクトを生成する（生成したから1.2秒の後でDelete）
-		Destroy(Instantiate(hitEffect, transform.position, Quaternion.identity, gameObject.transform) as GameObject, 1.2f);
+		//Destroy(Instantiate(hitEffect, transform.position, Quaternion.identity, gameObject.transform) as GameObject, 1.2f);
 		// 敵が攻撃されたアニメーションを再生する
 		ani.SetTrigger("beAttacked");
 		// Knock back
@@ -198,7 +189,7 @@ public abstract class EnemyCharaBase : MonoBehaviour
     //--------------------------------------------------------
     // 攻撃する
     //--------------------------------------------------------
-    public void Attack()
+    public virtual void Attack()
     {
         isAtkReady = false;
         atkTimer = 0.0f;

@@ -39,7 +39,7 @@ public class Enemy2 : EnemyCharaBase
 
         // 先頭の二回攻撃は、↑じゃないと、反撃される
         // いずれ反撃も攻撃も、した後敵が立ち去る
-        if (inputIndex < 2)
+        if (inputIndex < 3)
         {
             if (atkPattern == InputManager.AtkPattern.UP)
             {
@@ -48,7 +48,7 @@ public class Enemy2 : EnemyCharaBase
                 if (inputIndex == 1)
                 {
                     // 落ちる木棒を生成する
-                    Instantiate(club, transform.position, Quaternion.identity, Camera.main.transform);
+                    Instantiate(club, transform.position + new Vector3(0.0f, GetComponent<SpriteRenderer>().bounds.size.y / 2.0f, 0.0f), Quaternion.identity, Camera.main.transform);
                 }
             }
             else
@@ -78,16 +78,16 @@ public class Enemy2 : EnemyCharaBase
 
     protected override void SetBeAtkAni()
     {
-        Destroy(Instantiate(hitEffect, transform.position, Quaternion.identity) as GameObject, 1.2f);
+        //Destroy(Instantiate(hitEffect, transform.position, Quaternion.identity) as GameObject, 1.2f);
         transform.position = new Vector2(GameInfo.PlayerInfo.transform.position.x + GameInfo.PlayerInfo.atkRange, transform.position.y);
 
-        if (inputIndex == 0)
+        if (inputIndex < 2)
         {
             ani.SetTrigger("beAttacked");
         }
         else
         {
-            ani.SetBool("Skeleton_Hit_NoWeapon", true);
+            ani.SetBool("isNoWeapon", true);
         }
     }
 

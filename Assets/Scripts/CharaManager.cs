@@ -23,10 +23,10 @@ public class CharaManager : MonoBehaviour
     public enum CharaType
     {
         Player,
-        Club,
         Enemy0,
         Enemy1,
-        Enemy2
+        Enemy2,
+        Club
     }
 
     //------------------------------------------
@@ -70,14 +70,6 @@ public class CharaManager : MonoBehaviour
         clubAtkList.Clear();
         for (int i = 0; i < enemyList.Count; i++)
         {
-            // 画面の左側から5.0の距離を離したら、Delete
-            bool isOutScreen = enemyList[i].position.x < GameInfo.ScreenViewLeftEdgePos.x - 5.0f;
-            if (isOutScreen)
-            {
-                Destroy(enemyList[i].gameObject);
-                enemyList.RemoveAt(i);
-            }
-
             // 木棒攻撃List
             foreach (var x in transform.GetComponentsInChildren<Club>())
             {
@@ -101,6 +93,18 @@ public class CharaManager : MonoBehaviour
             {
                 playerCanAtkEnemyList.Add(i);
             }
+
+            // 死んだら、画面の左側から1.0の距離を離したら、Delete
+            bool isOutScreen = enemyList[i].position.x < GameInfo.ScreenViewLeftEdgePos.x - 1.0f;
+            bool isDead = enemyList[i].CurrentStatus == EnemyCharaBase.EnemyStatus.dead;
+            if (isOutScreen || isDead)
+            {
+                if(isOutScreen)
+                {
+                    Destroy(enemyList[i].gameObject,2.0f);
+                }
+                enemyList.RemoveAt(i);
+            }
         }
 
     }
@@ -115,13 +119,17 @@ public class CharaManager : MonoBehaviour
             if (CheckCanAtkPlayer(i))
             {
                 i.Attack();
-                GameInfo.PlayerInfo.BeAtked(i.atkPoint);
-                GameInfo.PlayerInfo.PlayAudio(PlayerManager.AudioIndex.playerBeHitted);
+
+                // Enemy1 本体はダメージを与えない、発射したブレットはする
+                if (i.GetComponent<Enemy1>() == null)
+                {
+                    GameInfo.PlayerInfo.BeAtked(i.atkPoint);
+                    GameInfo.PlayerInfo.PlayAudio(PlayerManager.AudioIndex.playerBeHitted);
+                }
             }
+            
         }
     }
-
-
 
     //---------------------------------------------------------------
     // 概要：プレイヤーが敵を攻撃しようとする
@@ -167,9 +175,9 @@ public class CharaManager : MonoBehaviour
     //---------------------------------------------------------------
     private bool CheckCanAtkPlayer(EnemyCharaBase enemy)
     {
-        // プレイヤーは敵の攻撃距離内のか
+        // プレイヤーは敵の攻撃距離内のか、画面内のか
         float distance = Mathf.Abs(GameInfo.PlayerInfo.pos.x - enemy.position.x);    // 敵とプレイヤーの距離
-        bool isTouchable = distance <= enemy.atkRange;
+        bool isTouchable = distance <= enemy.atkRange && enemy.position.x < GameInfo.ScreenViewRightEdgePos.x;
 
         // 敵が普通の状態であるのか
         bool isNormalStatus = enemy.CurrentStatus == EnemyCharaBase.EnemyStatus.normal;

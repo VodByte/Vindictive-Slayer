@@ -14,12 +14,23 @@ using UnityEngine;
 
 public class Enemy1 : EnemyCharaBase
 {
+    public GameObject bullet;
+    public float deadUpForce = 1.0f;
+
+    private float deadUpSpeed = 0.0f;
+
     //------------------------------------------
     // 更新処理
     //------------------------------------------
     void Update()
     {
         UpdateEnemyChara();
+
+        if (currentStatus == EnemyStatus.dead)
+        {
+            deadUpSpeed += deadUpForce * Time.deltaTime;
+            transform.position += new Vector3(0.0f, deadUpSpeed * Time.deltaTime, 0.0f);
+        }
     }
 
     //------------------------------------------
@@ -29,23 +40,41 @@ public class Enemy1 : EnemyCharaBase
     //------------------------------------------
     public override bool CheckPlayerInput(InputManager.AtkPattern atkPattern)
     {
-        bool isCounterAttack = false;
 
-        if (atkPattern != InputManager.AtkPattern.LEFT && atkPattern != InputManager.AtkPattern.NONE)
+        if (atkPattern == InputManager.AtkPattern.UP)
         {
             --iHp;
-            if (iHp > 0)
-            {
-                currentStatus = EnemyStatus.beAttacked;
-                SetBeAtkAni();
-            }
-            else
-            {
-                currentStatus = EnemyStatus.dead;
-                SetDeadAni();
-            }
+            currentStatus = EnemyStatus.dead;
+            SetDeadAni();
         }
 
-        return isCounterAttack;
+        return false;
     }
+
+    //--------------------------------------------------------
+    // 攻撃する
+    //--------------------------------------------------------
+    public override void Attack()
+    {
+        isAtkReady = false;
+        atkTimer = 0.0f;
+        ani.SetTrigger("attack");       // 攻撃あアニメーションを再生する
+        Instantiate(bullet, transform.GetChild(0).transform.position, Quaternion.identity);
+    }
+
+    //---------------------------------------------------
+    // 敵の死亡エフェクトを生成する
+    //---------------------------------------------------
+    protected override void SetDeadAni()
+    {
+        transform.GetChild(1).gameObject.SetActive(true);
+    }
+
+    public override void SetKnockout()
+    {
+        --iHp;
+        currentStatus = EnemyStatus.dead;
+        SetDeadAni();
+    }
+
 }

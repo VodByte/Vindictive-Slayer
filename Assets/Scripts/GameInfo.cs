@@ -1,5 +1,4 @@
-﻿#define Debug_On
-//---------------------------------------------------------------------
+﻿//---------------------------------------------------------------------
 // GameInfo.cs
 // ゲーム統合情報
 // 作成者　18CU0116 左国力
@@ -22,12 +21,9 @@ public class GameInfo : MonoBehaviour
     public static Vector2 ScreenViewLeftEdgePos;    // 画面一番左端の位置情報
     public static Vector2 ScreenViewRightEdgePos;   // 画面一番右端の位置情報
     public static PlayerManager PlayerInfo;         // プレイヤ情報
+    public const  float floorPos = -3.77f;
 
     public Text playerInfoText;     // 画面に表示する文字
-
-#if Debug_On
-    private float testInput = 1;
-#endif
 
     //-------------------------------------------------
     // 初期化処理
@@ -36,7 +32,6 @@ public class GameInfo : MonoBehaviour
     {
         ScreenViewLeftEdgePos = Camera.main.ViewportToWorldPoint(new Vector3(0.0f, 0.5f, 0.0f));
         ScreenViewRightEdgePos = Camera.main.ViewportToWorldPoint(new Vector3(1.0f, 0.5f, 0.0f));
-
         PlayerInfo = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>();
     }
 
@@ -47,24 +42,5 @@ public class GameInfo : MonoBehaviour
     {
         // プレイヤのHPを表示する
         playerInfoText.text = "Player HP:" + PlayerInfo.iHp.ToString();
-
-        // 1を押したら、スクロール速度 = 本来の速度 * 0.25
-        // 2を押したら、スクロール速度 = 本来の速度 * 0.5
-        // 3を押したら、スクロール速度 = 本来の速度
-#if Debug_On
-        ScrollSpeed = 1.0f * testInput;
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            testInput = 1.0f;
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            testInput = 0.05f;
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            testInput = 0.025f;
-        }
-#endif
     }
 }

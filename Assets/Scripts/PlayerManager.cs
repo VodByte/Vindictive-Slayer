@@ -53,23 +53,23 @@ public class PlayerManager : MonoBehaviour
     private float blinkTimer = 0.0f;    // Sprite点滅を計るタイマー
     private float atkTimer = 0.0f;
     private AudioSource[] audios;       // Player用SFX配列
-    private int prevIndex = 0;
+    private int prevUpIndex = 0;
+    private int prevMidIndex = 0;
+    private int prevDownIndex = 0;
     //-------------------------------------------------
     // 初期化処理
     //-------------------------------------------------
     private void Start()
     {
         ani = GetComponent<Animator>();
-        rigorTime = ani.runtimeAnimatorController.animationClips[2].length;     // Animator内の"adventurer_BeAtked"アニメーション長さを取得する
 
-        //for (int i = 0; i < ani.runtimeAnimatorController.animationClips.Length; i++)
-        //{
-        //    if (ani.runtimeAnimatorController.animationClips[i].name == "Player_MidAtk02")
-        //    {
-        //        atkRate = ani.runtimeAnimatorController.animationClips[i].length;
-        //    }
-        //}
-
+        for (int i = 0; i < ani.runtimeAnimatorController.animationClips.Length; i++)
+        {
+            if (ani.runtimeAnimatorController.animationClips[i].name == "Player_Hurt")
+            {
+                rigorTime = ani.runtimeAnimatorController.animationClips[i].length;     // Animator内の"Player_Hurt"アニメーション長さを取得する
+            }
+        }
         audios = GetComponents<AudioSource>();
     }
 
@@ -136,31 +136,35 @@ public class PlayerManager : MonoBehaviour
     {
         invincibleTimer += Time.deltaTime;
 
-        // 硬直時間を過ごしたなら
-        if (invincibleTimer >= rigorTime)
+        // 硬直アニメーションを過ごしたなら
+        if (invincibleTimer < rigorTime)
         {
-            GameInfo.ScrollSpeed = initialSpeed;        // 背景を動かす
-        }
-
-        // 無敵時間を過ごしたなら
-        if (invincibleTimer >= beAtkedInvincibleTime)
-        {
-            currentPlayerStatus = PlayerStatus.normal;
-            GetComponent<SpriteRenderer>().enabled = true;
-            invincibleTimer = 0.0f;
+            GameInfo.ScrollSpeed -= initialSpeed / rigorTime * Time.deltaTime;        // 段々背景を止める
         }
         else
         {
-            // プレイヤーのSpriteを点滅させる
-            blinkTimer += Time.deltaTime;
-            if (blinkTimer < blinkCycleTime)
+            GameInfo.ScrollSpeed = initialSpeed;        // 背景を動かす
+
+            // 無敵時間を過ごしたなら
+            if (invincibleTimer >= beAtkedInvincibleTime)
             {
-                GetComponent<SpriteRenderer>().enabled = false;
+                currentPlayerStatus = PlayerStatus.normal;
+                GetComponent<SpriteRenderer>().enabled = true;
+                invincibleTimer = 0.0f;
             }
             else
             {
-                GetComponent<SpriteRenderer>().enabled = true;
-                blinkTimer = 0.0f;
+                // プレイヤーのSpriteを点滅させる
+                blinkTimer += Time.deltaTime;
+                if (blinkTimer < blinkCycleTime)
+                {
+                    GetComponent<SpriteRenderer>().enabled = false;
+                }
+                else
+                {
+                    GetComponent<SpriteRenderer>().enabled = true;
+                    blinkTimer = 0.0f;
+                }
             }
         }
     }
@@ -175,7 +179,6 @@ public class PlayerManager : MonoBehaviour
         // 無敵なら、以下の処理はしない
         if (currentPlayerStatus == PlayerStatus.invincible) return;
 
-        GameInfo.ScrollSpeed = 0.0f;    // 背景画像を止める
         iHp -= damage;
         if (iHp <= 0)
         {
@@ -207,7 +210,27 @@ public class PlayerManager : MonoBehaviour
             switch (InputManager.currentAtkPattern)
             {
                 case InputManager.AtkPattern.UP:
-                    ani.SetTrigger("UpAtk01");
+                    {
+                        int index = 0;
+                        do
+                        {
+                            index = UnityEngine.Random.Range(1, 4);
+                        } while (index == prevUpIndex);
+                        prevUpIndex = index;
+
+                        switch (index)
+                        {
+                            case 1:
+                                ani.SetTrigger("UpAtk01");
+                                break;
+                            case 2:
+                                ani.SetTrigger("UpAtk02");
+                                break;
+                            case 3:
+                                ani.SetTrigger("UpAtk03");
+                                break;
+                        }
+                    }
                     break;
                 case InputManager.AtkPattern.RIGHT:
                     {
@@ -215,8 +238,8 @@ public class PlayerManager : MonoBehaviour
                         do
                         {
                             index = UnityEngine.Random.Range(1, 4);
-                        } while (index == prevIndex);
-                        prevIndex = index;
+                        } while (index == prevMidIndex);
+                        prevMidIndex = index;
 
                         switch (index)
                         {
@@ -235,7 +258,27 @@ public class PlayerManager : MonoBehaviour
                 case InputManager.AtkPattern.LEFT:
                     break;
                 case InputManager.AtkPattern.DOWN:
-                    ani.SetTrigger("DownAtk01");
+                    {
+                        int index = 0;
+                        do
+                        {
+                            index = UnityEngine.Random.Range(1, 4);
+                        } while (index == prevDownIndex);
+                        prevDownIndex = index;
+
+                        switch (index)
+                        {
+                            case 1:
+                                ani.SetTrigger("DownAtk01");
+                                break;
+                            case 2:
+                                ani.SetTrigger("DownAtk02");
+                                break;
+                            case 3:
+                                ani.SetTrigger("DownAtk03");
+                                break;
+                        }
+                    }
                     break;
             }
             return true;
