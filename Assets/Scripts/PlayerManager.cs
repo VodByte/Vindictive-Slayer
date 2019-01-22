@@ -90,6 +90,26 @@ public class PlayerManager : MonoBehaviour
             isAtkReady = true;
         }
 
+        // 状態に応じて処理を行う
+        switch (currentPlayerStatus)
+        {
+            case PlayerStatus.normal:
+                HandleMovement();
+                break;
+            case PlayerStatus.invincible:
+                HandleMovement();
+                UpdateInvincibleStatus();
+                break;
+            case PlayerStatus.dead:
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Handles the movement.
+    /// </summary>
+    private void HandleMovement()
+    {
         // 移動処理
         int dir = 0;
         switch (InputManager.currentMovePattern)
@@ -112,18 +132,6 @@ public class PlayerManager : MonoBehaviour
         else if (transform.position.x >= GameInfo.ScreenViewRightEdgePos.x)
         {
             transform.position = new Vector2(GameInfo.ScreenViewRightEdgePos.x, transform.position.y);
-        }
-
-        // 状態に応じて処理を行う
-        switch (currentPlayerStatus)
-        {
-            case PlayerStatus.normal:
-                break;
-            case PlayerStatus.invincible:
-                UpdateInvincibleStatus();
-                break;
-            case PlayerStatus.dead:
-                break;
         }
     }
 

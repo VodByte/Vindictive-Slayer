@@ -33,7 +33,6 @@ public class CharaManager : MonoBehaviour
     //変数宣言(Private)
     //------------------------------------------
     private List<EnemyCharaBase> enemyList = new List<EnemyCharaBase> { };  // ゲーム内いる敵を全部格納用List
-    private List<int> playerCanAtkEnemyList = new List<int> { };            // そのListの中に、プレイヤーが攻撃可能の敵の要素番号を格納用List
     private List<int> clubAtkList = new List<int> { };
 
     //-------------------------------------------------------------
@@ -66,7 +65,6 @@ public class CharaManager : MonoBehaviour
     private void UpdateList()
     {
         // 毎回Listをクリアして、判定する
-        playerCanAtkEnemyList.Clear();
         clubAtkList.Clear();
         for (int i = 0; i < enemyList.Count; i++)
         {
@@ -82,16 +80,6 @@ public class CharaManager : MonoBehaviour
                 {
                     clubAtkList.Add(i);
                 }
-            }
-
-            // 敵とプレイヤーの距離
-            float enemy2playerDistance = Mathf.Abs(GameInfo.PlayerInfo.pos.x - enemyList[i].position.x);
-            // その距離はプレイヤーの攻撃範囲内のか
-            bool isPlayerCanAtkEnemy = enemy2playerDistance <= GameInfo.PlayerInfo.atkRange;
-            // プレイヤーが攻撃できる敵の情報を格納用Listに追加
-            if (isPlayerCanAtkEnemy)
-            {
-                playerCanAtkEnemyList.Add(i);
             }
 
             // 死んだら、画面の左側から1.0の距離を離したら、Delete
@@ -127,7 +115,6 @@ public class CharaManager : MonoBehaviour
                     GameInfo.PlayerInfo.PlayAudio(PlayerManager.AudioIndex.playerBeHitted);
                 }
             }
-            
         }
     }
 
@@ -136,35 +123,66 @@ public class CharaManager : MonoBehaviour
     //---------------------------------------------------------------
     private void HandlePlayerAtkEnemy()
     {
+        // プレイヤーの攻撃準備完了、かつ攻撃ボタンを押した
         if (InputManager.currentAtkPattern != InputManager.AtkPattern.NONE)
         {
-            bool isPlayerCanAtk = GameInfo.PlayerInfo.Attack();
+            bool isReady = GameInfo.PlayerInfo.Attack();
+            if (!isReady) return;
 
-            if (isPlayerCanAtk)
+            // チェックするコライーダの用意
+            Collider2D checkCollider = new Collider2D();
+
+            if (InputManager.currentAtkPattern == InputManager.AtkPattern.LEFT)
             {
-                // 攻撃できる敵がいるなら
-                if (playerCanAtkEnemyList.Count != 0)
+                checkCollider = GameInfo.PlayerInfo.gameObject.transform.GetChild(1).gameObject.GetComponent<CircleCollider2D>();
+
+            }
+            else
+            {
+                checkCollider = GameInfo.PlayerInfo.gameObject.transform.GetChild(0).gameObject.GetComponent<CircleCollider2D>();
+            }
+
+            Collider2D[] enemies = new Collider2D[8];   // 衝突している敵を格納配列
+            ContactFilter2D filter2D = new ContactFilter2D
+            {
+                layerMask = LayerMask.NameToLayer("Enemy"),
+                useTriggers = true
+            };
+            bool isAllNull = true;  // この配列は空っぽなのか
+
+            checkCollider.OverlapCollider(filter2D, enemies);
+            for (int i = 0; i < 8; i++)
+            {
+                if (enemies[i] != null)
                 {
-                    foreach (var i in playerCanAtkEnemyList)
+                    var enemyInfo = enemies[i].gameObject.GetComponent<EnemyCharaBase>();
+                    if (enemyInfo.CurrentStatus != EnemyCharaBase.EnemyStatus.dead) // 死亡した敵に攻撃しない
                     {
-                        // 敵が反撃するのか(Enemy0,Enemy1は反撃機能がない)
-                        bool isEnemyCounterAttack = enemyList[i].CheckPlayerInput(InputManager.currentAtkPattern);
-                        if (isEnemyCounterAttack)
+                        isAllNull = false;
+                        // 左から敵が反撃しないので、判定しない
+                        bool isCounterAttack = enemyInfo.CheckPlayerInput(InputManager.currentAtkPattern);
+                        // 敵が右から来るの上、反撃するなら
+                        if (InputManager.currentAtkPattern != InputManager.AtkPattern.LEFT && isCounterAttack)
                         {
-                            enemyList[i].CounterAttack();       // 反撃をする
-                            GameInfo.PlayerInfo.BeAtked(enemyList[i].atkPoint);     // プレイヤーのダメージ処理
+                            enemyInfo.CounterAttack();
+                            GameInfo.PlayerInfo.BeAtked(enemyInfo.atkPoint);
                         }
-                        // プレイヤーの武器が敵に当たったSFX
                         GameInfo.PlayerInfo.PlayAudio(PlayerManager.AudioIndex.swordHitEnemy01);
                     }
                 }
-                // 素振りで攻撃できる敵がいないなら
-                else
-                {
-                    GameInfo.PlayerInfo.PlayAudio(PlayerManager.AudioIndex.swordGesture);
-                }
             }
+
             GetComponent<InputManager>().ResetAtkInfo();
+
+            // 素振りで攻撃できる敵がいないなら
+            if (isAllNull)
+            {
+                GameInfo.PlayerInfo.PlayAudio(PlayerManager.AudioIndex.swordGesture);
+            }
+            else
+            {
+                GameInfo.PlayerInfo.PlayAudio(PlayerManager.AudioIndex.swordHitEnemy01);
+            }
         }
     }
 

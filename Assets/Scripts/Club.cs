@@ -12,14 +12,14 @@ public class Club : MonoBehaviour
     public float AccMultiply = 0.2f;
 
     private float moveSpeed = 0.0f;
-    private bool isBelowFloor = false;
     private bool isHitRight = false;
     private float dropSpeed = 0.0f;
 
     private void Update()
     {
-        isBelowFloor = transform.position.y + GetComponent<SpriteRenderer>().bounds.size.y * 0.5f < GameInfo.floorPos;
-        if (!isBelowFloor && InputManager.currentAtkPattern == InputManager.AtkPattern.RIGHT)
+        CheckSightless();
+
+        if (InputManager.currentAtkPattern == InputManager.AtkPattern.RIGHT)
         {
             isHitRight = true;
         }
@@ -34,13 +34,15 @@ public class Club : MonoBehaviour
             transform.position -= new Vector3(0.0f, dropSpeed, 0.0f);
         }
 
-        CheckSightless();
     }
 
     private void CheckSightless()
     {
         // 画面外なら消す
-        bool isOutScreen = transform.position.x + GetComponent<SpriteRenderer>().bounds.size.x > GameInfo.ScreenViewRightEdgePos.x;
+        Vector2 viwePos = Camera.main.WorldToViewportPoint(transform.position);
+        
+        bool isBelowFloor = transform.position.y + GetComponent<SpriteRenderer>().bounds.size.y * 0.25f < GameInfo.floorPos;
+        bool isOutScreen = transform.position.x > GameInfo.ScreenViewRightEdgePos.x;
         if (isOutScreen || isBelowFloor)
         {
             Destroy(gameObject);

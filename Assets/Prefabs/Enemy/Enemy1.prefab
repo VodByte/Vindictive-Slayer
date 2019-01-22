@@ -22,7 +22,8 @@ GameObject:
   - component: {fileID: 212353963088017374}
   - component: {fileID: 95254994264738462}
   - component: {fileID: 114601567779353262}
-  m_Layer: 0
+  - component: {fileID: 58584471651028060}
+  m_Layer: 8
   m_Name: Enemy1
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -39,7 +40,7 @@ GameObject:
   - component: {fileID: 4219633158608254}
   - component: {fileID: 198494042400009432}
   - component: {fileID: 199301814017294692}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: DeadEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -54,7 +55,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4448764944355322}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BulletLocate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -102,6 +103,21 @@ Transform:
   m_Father: {fileID: 4117556719670010}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &58584471651028060
+CircleCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1395660437294194}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 1}
+  serializedVersion: 2
+  m_Radius: 1
 --- !u!95 &95254994264738462
 Animator:
   serializedVersion: 3
@@ -140,7 +156,6 @@ MonoBehaviour:
   atkRate: 4.13
   atkPoint: 0
   iHp: 1
-  knockDistance: 3
   knockSpeed: -4
   knockUpHeight: 1
   knockUpSpeed: 4
@@ -3600,7 +3615,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 921483469
   m_SortingLayer: 5
-  m_SortingOrder: 50
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 8d38ce1de215324429bfd0593ac17518, type: 3}
   m_Color: {r: 0.691, g: 0.691, b: 0.691, a: 1}
   m_FlipX: 0
