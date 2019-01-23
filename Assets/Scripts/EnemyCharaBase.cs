@@ -58,8 +58,6 @@ public abstract class EnemyCharaBase : MonoBehaviour
     [SerializeField] private float knockUpHeight = 1.0f;
     [SerializeField] private float knockUpSpeed = 2.0f;
 
-    private float knockTraveled = 0.0f;  // knock out traveled distance
-
     //-------------------------------------------------
     // 初期化処理
     //-------------------------------------------------

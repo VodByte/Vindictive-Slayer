@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Club : MonoBehaviour 
 {
@@ -39,8 +36,6 @@ public class Club : MonoBehaviour
     private void CheckSightless()
     {
         // 画面外なら消す
-        Vector2 viwePos = Camera.main.WorldToViewportPoint(transform.position);
-        
         bool isBelowFloor = transform.position.y + GetComponent<SpriteRenderer>().bounds.size.y * 0.25f < GameInfo.floorPos;
         bool isOutScreen = transform.position.x > GameInfo.ScreenViewRightEdgePos.x;
         if (isOutScreen || isBelowFloor)
