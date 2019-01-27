@@ -1,13 +1,12 @@
 fileFormatVersion: 2
-guid: 4c41bd9dd6c63614fb4b5d721b5e0529
-timeCreated: 1547966712
+guid: 5bb8f881054825e44bfe89f1c443f5ff
+timeCreated: 1548597883
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: oni_Idle_0
-    21300002: oni_Idle_1
-    21300004: oni_Idle_2
-    21300006: oni_Idle_3
+    21300000: oni_BeAtk_NoWeapon_0
+    21300002: oni_BeAtk_NoWeapon_1
+    21300004: oni_BeAtk_NoWeapon_2
   externalObjects: {}
   serializedVersion: 4
   mipmaps:
@@ -84,57 +83,43 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: oni_Idle_0
+      name: oni_BeAtk_NoWeapon_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 32
-        height: 32
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        width: 64
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: oni_Idle_1
-      rect:
-        serializedVersion: 2
-        x: 32
-        y: 0
-        width: 32
-        height: 32
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: oni_Idle_2
+      name: oni_BeAtk_NoWeapon_1
       rect:
         serializedVersion: 2
         x: 64
         y: 0
-        width: 32
-        height: 32
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        width: 64
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: oni_Idle_3
+      name: oni_BeAtk_NoWeapon_2
       rect:
         serializedVersion: 2
-        x: 96
+        x: 128
         y: 0
-        width: 32
-        height: 32
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        width: 64
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

@@ -35,11 +35,11 @@ public class Enemy2 : EnemyCharaBase
     {
         bool isCounterAttack = false;
 
-        bool isFirstTwoAtkSuccess = false;
+        bool isFirstTwoAtkSuccess = true;
 
         // 先頭の二回攻撃は、↑じゃないと、反撃される
         // いずれ反撃も攻撃も、した後敵が立ち去る
-        if (inputIndex < 3)
+        if (inputIndex < 2)
         {
             if (atkPattern == InputManager.AtkPattern.UP)
             {
@@ -48,7 +48,7 @@ public class Enemy2 : EnemyCharaBase
                 if (inputIndex == 1)
                 {
                     // 落ちる木棒を生成する
-                    Instantiate(club, transform.position + new Vector3(0.0f, GetComponent<SpriteRenderer>().bounds.size.y / 2.0f, 0.0f), Quaternion.identity, Camera.main.transform);
+                    Instantiate(club, transform.position + Vector3.up * 2.0f, Quaternion.identity, Camera.main.transform);
                 }
             }
             else
@@ -97,6 +97,7 @@ public class Enemy2 : EnemyCharaBase
     //------------------------------------------
     public override bool CounterAttack()
     {
+        Attack();
         bool result = false;
         return result;
     }

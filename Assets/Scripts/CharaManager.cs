@@ -159,10 +159,9 @@ public class CharaManager : MonoBehaviour
                     if (enemyInfo.CurrentStatus != EnemyCharaBase.EnemyStatus.dead) // 死亡した敵に攻撃しない
                     {
                         isAllNull = false;
-                        // 左から敵が反撃しないので、判定しない
+                        // 反撃
                         bool isCounterAttack = enemyInfo.CheckPlayerInput(InputManager.currentAtkPattern);
-                        // 敵が右から来るの上、反撃するなら
-                        if (InputManager.currentAtkPattern != InputManager.AtkPattern.LEFT && isCounterAttack)
+                        if (isCounterAttack)
                         {
                             enemyInfo.CounterAttack();
                             GameInfo.PlayerInfo.BeAtked(enemyInfo.atkPoint);

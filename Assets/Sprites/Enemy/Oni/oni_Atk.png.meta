@@ -1,11 +1,13 @@
 fileFormatVersion: 2
-guid: c05d862904da4c84bbc31e4fc171fc01
-timeCreated: 1547966712
+guid: 3a8a893b925e8214599732e985665f4c
+timeCreated: 1548597094
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: oni_Ide_NoWeapon_0
-    21300002: oni_Ide_NoWeapon_1
+    21300000: oni_Atk_0
+    21300002: oni_Atk_1
+    21300004: oni_Atk_2
+    21300006: oni_Atk_3
   externalObjects: {}
   serializedVersion: 4
   mipmaps:
@@ -82,29 +84,57 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: oni_Ide_NoWeapon_0
+      name: oni_Atk_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 32
-        height: 32
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        width: 64
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: oni_Ide_NoWeapon_1
+      name: oni_Atk_1
       rect:
         serializedVersion: 2
-        x: 32
+        x: 64
         y: 0
-        width: 32
-        height: 32
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        width: 64
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: oni_Atk_2
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 0
+        width: 64
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: oni_Atk_3
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 64
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
