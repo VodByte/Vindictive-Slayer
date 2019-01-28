@@ -131,11 +131,9 @@ public class CharaManager : MonoBehaviour
 
             // チェックするコライーダの用意
             Collider2D checkCollider = new Collider2D();
-
             if (InputManager.currentAtkPattern == InputManager.AtkPattern.LEFT)
             {
                 checkCollider = GameInfo.PlayerInfo.gameObject.transform.GetChild(1).gameObject.GetComponent<CircleCollider2D>();
-
             }
             else
             {

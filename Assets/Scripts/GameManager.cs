@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     CharaManager cm;
     [SerializeField] Transform mark;
     [SerializeField] int[] types;
+    public GameObject pauseMenu;
 
     //-------------------------------------------------
     // 初期化処理
@@ -48,5 +49,10 @@ public class GameManager : MonoBehaviour
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 #endif
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            pauseMenu.SetActive(!pauseMenu.activeSelf);
+        }
     }
 }

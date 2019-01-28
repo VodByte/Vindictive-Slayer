@@ -31,7 +31,7 @@ public class Enemy0 : EnemyCharaBase
         bool isCounterAttack = false;
 
 		// 入力したキーは ↑ ↓ → のいずれなら
-        if (atkPattern != InputManager.AtkPattern.LEFT && atkPattern != InputManager.AtkPattern.NONE)
+        if (atkPattern != InputManager.AtkPattern.NONE)
         {
 			// 一撃で死亡
             SetDeadAni();

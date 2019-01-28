@@ -35,29 +35,58 @@ public class Enemy2 : EnemyCharaBase
     {
         bool isCounterAttack = false;
 
-		// 先頭の二回攻撃は、↑じゃないと、反撃される
-		// いずれ反撃も攻撃も、した後敵が立ち去る
-		if (atkPattern == InputManager.AtkPattern.UP && successInputCount < 3)
-		{
-			++successInputCount;
-			currentStatus = EnemyStatus.beAttacked;
-			SetBeAtkAni();
+        if (transform.position.x > GameInfo.PlayerInfo.pos.x && successInputCount < 3 && atkPattern == InputManager.AtkPattern.UP)
+        {
+            ++successInputCount;
+            currentStatus = EnemyStatus.beAttacked;
+            SetBeAtkAni();
 
-			if (successInputCount == 2)
-			{
-				// 落ちる木棒を生成する
-				Instantiate(club, transform.position + Vector3.up * 2.0f, Quaternion.identity, Camera.main.transform);
-			}
-		}
-		else if (atkPattern != InputManager.AtkPattern.UP && atkPattern != InputManager.AtkPattern.LEFT && successInputCount < 3)
-		{
-			isCounterAttack = true;
-		}
-		else if (atkPattern != InputManager.AtkPattern.LEFT && successInputCount >= 3)
-		{
-			SetDeadAni();
-			currentStatus = EnemyStatus.dead;
-		}
+            if (successInputCount == 2)
+            {
+                // 落ちる木棒を生成する
+                Instantiate(club, transform.position + Vector3.up * 2.0f, Quaternion.identity, Camera.main.transform);
+            }
+         }
+        else if (
+                ((transform.position.x > GameInfo.PlayerInfo.pos.x) && successInputCount < 3 && atkPattern != InputManager.AtkPattern.UP) 
+                || (transform.position.x <= GameInfo.PlayerInfo.pos.x) && successInputCount < 3) 
+        {
+            isCounterAttack = true;
+        }
+        else if ((
+                transform.position.x > GameInfo.PlayerInfo.pos.x && successInputCount >= 3 && atkPattern != InputManager.AtkPattern.LEFT
+                )
+                || 
+                (transform.position.x <= GameInfo.PlayerInfo.pos.x && successInputCount >= 3 && atkPattern == InputManager.AtkPattern.LEFT
+                ))
+        {
+            SetDeadAni();
+            currentStatus = EnemyStatus.dead;
+        }
+
+  //      // 先頭の二回攻撃は、↑じゃないと、反撃される
+  //      // いずれ反撃も攻撃も、した後敵が立ち去る
+  //      if (atkPattern == InputManager.AtkPattern.UP && successInputCount < 3)
+		//{
+		//	++successInputCount;
+		//	currentStatus = EnemyStatus.beAttacked;
+		//	SetBeAtkAni();
+
+		//	if (successInputCount == 2)
+		//	{
+		//		// 落ちる木棒を生成する
+		//		Instantiate(club, transform.position + Vector3.up * 2.0f, Quaternion.identity, Camera.main.transform);
+		//	}
+		//}
+		//else if ( atkPattern != InputManager.AtkPattern.UP && atkPattern != InputManager.AtkPattern.LEFT && successInputCount < 3)
+		//{
+		//	isCounterAttack = true;
+		//}
+		//else if (atkPattern != InputManager.AtkPattern.LEFT && successInputCount >= 3)
+		//{
+		//	SetDeadAni();
+		//	currentStatus = EnemyStatus.dead;
+		//}
 
         return isCounterAttack;
     }
