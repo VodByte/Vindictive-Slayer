@@ -264,7 +264,8 @@ public class PlayerManager : MonoBehaviour
                     }
                     break;
                 case InputManager.AtkPattern.LEFT:
-                    break;
+						ani.SetTrigger("LeftAtk01");
+						break;
                 case InputManager.AtkPattern.DOWN:
                     {
                         int index = 0;

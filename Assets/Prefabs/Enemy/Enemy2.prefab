@@ -90,7 +90,7 @@ MonoBehaviour:
   hitEffect: {fileID: 100000, guid: f06e78284f831ae469c74624ab5d513b, type: 2}
   deadEffect: {fileID: 100004, guid: 7867af58a6ec48846ae807eb4022fbaa, type: 2}
   moveSpeed: 1.34
-  RigorTime: 2
+  RigorTime: 0.71
   atkRange: 1
   isAtkReady: 1
   atkRate: 2

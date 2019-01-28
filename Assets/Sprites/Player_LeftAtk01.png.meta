@@ -1,13 +1,15 @@
 fileFormatVersion: 2
-guid: 3a8a893b925e8214599732e985665f4c
-timeCreated: 1548597094
-licenseType: Free
+guid: a9d1c0acd2fd19f4ea21c22f78847436
+timeCreated: 1548635679
+licenseType: Pro
 TextureImporter:
   fileIDToRecycleName:
-    21300000: oni_Atk_0
-    21300002: oni_Atk_1
-    21300004: oni_Atk_2
-    21300006: oni_Atk_3
+    21300000: Player_LeftAtk01_0
+    21300002: Player_LeftAtk01_1
+    21300004: Player_LeftAtk01_2
+    21300006: Player_LeftAtk01_3
+    21300008: Player_LeftAtk01_4
+    21300010: Player_LeftAtk01_5
   externalObjects: {}
   serializedVersion: 4
   mipmaps:
@@ -50,7 +52,7 @@ TextureImporter:
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spritePixelsToUnits: 8
+  spritePixelsToUnits: 15
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
@@ -84,57 +86,85 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: oni_Atk_0
+      name: Player_LeftAtk01_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 64
-        height: 64
-      alignment: 9
-      pivot: {x: 0.5, y: 0.25}
+        width: 50
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: oni_Atk_1
+      name: Player_LeftAtk01_1
       rect:
         serializedVersion: 2
-        x: 64
+        x: 50
         y: 0
-        width: 64
-        height: 64
-      alignment: 9
-      pivot: {x: 0.5, y: 0.25}
+        width: 50
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: oni_Atk_2
+      name: Player_LeftAtk01_2
       rect:
         serializedVersion: 2
-        x: 128
+        x: 100
         y: 0
-        width: 64
-        height: 64
-      alignment: 9
-      pivot: {x: 0.5, y: 0.25}
+        width: 50
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: oni_Atk_3
+      name: Player_LeftAtk01_3
       rect:
         serializedVersion: 2
-        x: 192
+        x: 150
         y: 0
-        width: 64
-        height: 64
-      alignment: 9
-      pivot: {x: 0.5, y: 0.25}
+        width: 50
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Player_LeftAtk01_4
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 0
+        width: 50
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Player_LeftAtk01_5
+      rect:
+        serializedVersion: 2
+        x: 250
+        y: 0
+        width: 50
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
