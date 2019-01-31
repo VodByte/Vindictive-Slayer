@@ -20,6 +20,7 @@ public abstract class EnemyCharaBase : MonoBehaviour
     public Vector2 position;			// 敵の座標
     public GameObject hitEffect;		// 当たられたエフェクトのPrefab
     public GameObject deadEffect;       // 死亡エフェクトのPrefab
+    public GameObject atkEffect;        // 攻撃エフェクトのPrefab
     public float moveSpeed;             // 右からくる速度(0.１に設定するのを推薦)
     public float RigorTime = 2.0f;		// 硬直時間（当たられたアニメーションがあったら、アニメーションの長さに応じて設定する）
     public float atkRange;              // 敵攻撃距離
@@ -28,6 +29,7 @@ public abstract class EnemyCharaBase : MonoBehaviour
     public float atkRate = 0.1f;        // 敵の攻撃頻度
     public int atkPoint = 1;			// 敵の攻撃力
     public int iHp;                     // 敵HP（使えない敵もいる）
+    public bool isOutScreen = false;    // ゲーム画面外
     // 敵の状態
     public enum EnemyStatus
     {
@@ -57,6 +59,7 @@ public abstract class EnemyCharaBase : MonoBehaviour
     private float knockUpTravel = 0.0f;
     [SerializeField] private float knockUpHeight = 1.0f;
     [SerializeField] private float knockUpSpeed = 2.0f;
+    internal SpriteRenderer sr;
 
     //-------------------------------------------------
     // 初期化処理
@@ -65,14 +68,15 @@ public abstract class EnemyCharaBase : MonoBehaviour
     {
         position = transform.position;
         ani = GetComponent<Animator>();
-	}
+        sr = GetComponent<SpriteRenderer>();
+    }
 
-	//------------------------------------------
-	// 更新処理(キャラクター共通)
-	//------------------------------------------
-	protected void UpdateEnemyChara()
+    //------------------------------------------
+    // 更新処理(キャラクター共通)
+    //------------------------------------------
+    protected void UpdateEnemyChara()
     {
-		// HPが0以下なら、死亡状態
+        // HPが0以下なら、死亡状態
         if (iHp <= 0)
         {
             currentStatus = EnemyStatus.dead;
@@ -88,26 +92,14 @@ public abstract class EnemyCharaBase : MonoBehaviour
             isAtkReady = true;
         }
 
-		// 状態に応じて処理を行う
+        // 状態に応じて処理を行う
         switch (CurrentStatus)
         {
-			// 使われた速度は 敵自身の速度 + 画面移動の速度
+            // 使われた速度は 敵自身の速度 + 画面移動の速度
             case EnemyStatus.normal:
                 currentSpeed = moveSpeed + GameInfo.ScrollSpeed;
-
-                // 常に顔をプレイヤーに向ける
-                bool isFlip = true;
-                if (transform.position.x <= GameInfo.PlayerInfo.pos.x)
-                {
-                    isFlip = true;
-                }
-                else
-                {
-                    isFlip = false;
-                }
-                GetComponent<SpriteRenderer>().flipX = isFlip;
                 break;
-			// 止まり、硬直してから、普通状態に戻す
+            // 止まり、硬直してから、普通状態に戻す
             case EnemyStatus.beAttacked:
                 currentSpeed = 0.0f;
                 rigorTimer += Time.deltaTime;
@@ -129,12 +121,12 @@ public abstract class EnemyCharaBase : MonoBehaviour
 
                 if (transform.position.y <= GameInfo.floorPos)
                 {
-                   currentStatus = EnemyStatus.dead;
+                    currentStatus = EnemyStatus.dead;
                 }
                 break;
             // 死亡、死亡アニメーションを再生
             case EnemyStatus.dead:
-                GetComponent<SpriteRenderer>().sortingOrder = -100;
+                sr.sortingOrder = -100;
                 ani.SetBool("isDead", true);
                 currentSpeed = deadSpeed;
                 break;
@@ -143,6 +135,16 @@ public abstract class EnemyCharaBase : MonoBehaviour
         // 敵の移動と実座標の更新
         transform.Translate(Vector2.left * currentSpeed * Time.deltaTime);
         position = transform.position;
+
+        isOutScreen = CheckOutScreen();
+    }
+
+    //---------------------------------------------------------------
+    // 敵がゲーム画面外か
+    //---------------------------------------------------------------
+    internal virtual bool CheckOutScreen()
+    {
+        return position.x < GameInfo.ScreenViewLeftEdgePos.x - 1.0f;
     }
 
     //---------------------------------------------------------------
@@ -199,6 +201,6 @@ public abstract class EnemyCharaBase : MonoBehaviour
     //--------------------------------------------------------
     private void OnDrawGizmos()
     {
-        Gizmos.DrawWireCube(GetComponent<SpriteRenderer>().bounds.center, new Vector3(atkRange, 5.0f, 1.0f));
+        Gizmos.DrawWireCube(sr.bounds.center, new Vector3(atkRange, 5.0f, 1.0f));
     }
 }

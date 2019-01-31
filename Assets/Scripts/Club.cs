@@ -11,6 +11,7 @@ public class Club : MonoBehaviour
     private float moveSpeed = 0.0f;
     private bool isHitRight = false;
     private float dropSpeed = 0.0f;
+    private bool isAttackable = false;
 
     private void Update()
     {
@@ -19,6 +20,7 @@ public class Club : MonoBehaviour
         if (InputManager.currentAtkPattern == InputManager.AtkPattern.RIGHT)
         {
             isHitRight = true;
+            isAttackable = true;
         }
 
         if (isHitRight)
@@ -36,7 +38,7 @@ public class Club : MonoBehaviour
     private void CheckSightless()
     {
         // 画面外なら消す
-        bool isBelowFloor = transform.position.y + GetComponent<SpriteRenderer>().bounds.size.y * 0.25f < GameInfo.floorPos;
+        bool isBelowFloor = transform.position.y < GameInfo.floorPos;
         bool isOutScreen = transform.position.x > GameInfo.ScreenViewRightEdgePos.x;
         if (isOutScreen || isBelowFloor)
         {
@@ -49,6 +51,17 @@ public class Club : MonoBehaviour
         moveSpeed += knockForce / AccMultiply;
         transform.Translate(Vector2.right * moveSpeed * Time.deltaTime, Space.World);
         pos = transform.position;
+    }
+
+    public bool CanDamage(EnemyCharaBase enemy)
+    {
+        bool isInRagne = Mathf.Pow((enemy.position.x - transform.position.x), 2) 
+        + Mathf.Pow((enemy.position.y - transform.position.y), 2) <= atkRange * atkRange;
+
+        bool isStatusReady = enemy.CurrentStatus != EnemyCharaBase.EnemyStatus.dead
+                    && enemy.CurrentStatus != EnemyCharaBase.EnemyStatus.beKnocked;
+
+        return isInRagne && isStatusReady && isAttackable;
     }
 
     private void OnDrawGizmos()

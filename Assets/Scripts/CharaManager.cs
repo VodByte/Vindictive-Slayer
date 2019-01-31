@@ -26,6 +26,7 @@ public class CharaManager : MonoBehaviour
         Enemy0,
         Enemy1,
         Enemy2,
+        Enemy3,
         Club
     }
 
@@ -68,29 +69,17 @@ public class CharaManager : MonoBehaviour
         clubAtkList.Clear();
         for (int i = 0; i < enemyList.Count; i++)
         {
-            // 木棒攻撃List
+            // 木棒List foreach
             foreach (var x in transform.GetComponentsInChildren<Club>())
             {
-                float club2EnemyDistance = Mathf.Abs(x.pos.x - enemyList[i].position.x);
-                bool isDistanceReady = club2EnemyDistance <= x.atkRange;
-                bool isStatusReady = enemyList[i].CurrentStatus != EnemyCharaBase.EnemyStatus.dead
-                    && enemyList[i].CurrentStatus != EnemyCharaBase.EnemyStatus.beKnocked;
-
-                if (isDistanceReady && isStatusReady)
-                {
-                    clubAtkList.Add(i);
-                }
+                if (x.CanDamage(enemyList[i])) clubAtkList.Add(i);
             }
 
             // 死んだら、画面の左側から1.0の距離を離したら、Delete
-            bool isOutScreen = enemyList[i].position.x < GameInfo.ScreenViewLeftEdgePos.x - 1.0f;
             bool isDead = enemyList[i].CurrentStatus == EnemyCharaBase.EnemyStatus.dead;
-            if (isOutScreen || isDead)
+            if (enemyList[i].isOutScreen || isDead)
             {
-                if(isOutScreen)
-                {
-                    Destroy(enemyList[i].gameObject,2.0f);
-                }
+                Destroy(enemyList[i].gameObject, 2.0f);
                 enemyList.RemoveAt(i);
             }
         }

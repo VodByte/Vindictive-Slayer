@@ -1,14 +1,15 @@
 fileFormatVersion: 2
-guid: 6ed10c84a5729dc49addaa450eccec85
-timeCreated: 1547976002
+guid: d7617a8b47d9046049f321f8a7eba244
+timeCreated: 1548918672
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: gaki_Dead_0
-    21300002: gaki_Dead_1
-    21300004: gaki_Dead_2
-    21300006: gaki_Dead_3
-    21300008: gaki_Dead_4
+    21300000: Ghost_Dead_0
+    21300002: Ghost_Dead_1
+    21300004: Ghost_Dead_2
+    21300006: Ghost_Dead_3
+    21300008: Ghost_Dead_4
+    21300010: Ghost_Dead_5
   externalObjects: {}
   serializedVersion: 4
   mipmaps:
@@ -51,7 +52,7 @@ TextureImporter:
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spritePixelsToUnits: 30
+  spritePixelsToUnits: 16
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
@@ -85,13 +86,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: gaki_Dead_0
+      name: Ghost_Dead_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 32
-        height: 32
+        width: 50
+        height: 37
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -99,13 +100,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: gaki_Dead_1
+      name: Ghost_Dead_1
       rect:
         serializedVersion: 2
-        x: 32
+        x: 50
         y: 0
-        width: 32
-        height: 32
+        width: 50
+        height: 37
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -113,13 +114,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: gaki_Dead_2
+      name: Ghost_Dead_2
       rect:
         serializedVersion: 2
-        x: 64
+        x: 100
         y: 0
-        width: 32
-        height: 32
+        width: 50
+        height: 37
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -127,13 +128,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: gaki_Dead_3
+      name: Ghost_Dead_3
       rect:
         serializedVersion: 2
-        x: 96
+        x: 150
         y: 0
-        width: 32
-        height: 32
+        width: 50
+        height: 37
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,13 +142,27 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: gaki_Dead_4
+      name: Ghost_Dead_4
       rect:
         serializedVersion: 2
-        x: 128
+        x: 200
         y: 0
-        width: 32
-        height: 32
+        width: 50
+        height: 37
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Ghost_Dead_5
+      rect:
+        serializedVersion: 2
+        x: 250
+        y: 0
+        width: 50
+        height: 37
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
