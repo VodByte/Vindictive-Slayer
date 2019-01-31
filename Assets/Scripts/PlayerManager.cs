@@ -47,10 +47,12 @@ public class PlayerManager : MonoBehaviour
     // 変数宣言(private)
     //------------------------------------------
     private Animator ani;      // Player GameObjectにアタッチしたAnimator
-    private float initialSpeed = GameInfo.ScrollSpeed;      // 背景の初期移動速度
+    private float bgInitialSpeed = GameInfo.ScrollSpeed;      // 背景の初期移動速度
     private float rigorTime;        // 当たられたら硬直時間(今はadventurer_BeAtkedアニメーションの長さで設定する)
     private float invincibleTimer = 0.0f;       // 無敵時間を計るタイマー
     private float blinkTimer = 0.0f;    // Sprite点滅を計るタイマー
+    private float rigorTimer = 0.0f;
+    private float playerInitalSpeed;
     private float atkTimer = 0.0f;
     private AudioSource[] audios;       // Player用SFX配列
     private int prevUpIndex = 0;
@@ -61,13 +63,15 @@ public class PlayerManager : MonoBehaviour
     //-------------------------------------------------
     private void Start()
     {
+        playerInitalSpeed = moveSpeed;
         ani = GetComponent<Animator>();
 
         for (int i = 0; i < ani.runtimeAnimatorController.animationClips.Length; i++)
         {
             if (ani.runtimeAnimatorController.animationClips[i].name == "Player_Hurt")
             {
-                rigorTime = ani.runtimeAnimatorController.animationClips[i].length;     // Animator内の"Player_Hurt"アニメーション長さを取得する
+                AnimationClip ac = ani.runtimeAnimatorController.animationClips[i];
+                rigorTime = ac.length / 0.3f;     // Animator内の"Player_Hurt"アニメーション長さを取得する
             }
         }
         audios = GetComponents<AudioSource>();
@@ -98,6 +102,7 @@ public class PlayerManager : MonoBehaviour
                 break;
             case PlayerStatus.invincible:
                 HandleMovement();
+                UpdateRigorStatus();
                 UpdateInvincibleStatus();
                 break;
             case PlayerStatus.dead:
@@ -140,39 +145,53 @@ public class PlayerManager : MonoBehaviour
     // 戻り値：なし
     // 引数：なし
     //------------------------------------------
+    private void UpdateRigorStatus()
+    {
+        isAtkReady = false;
+        moveSpeed = 0.0f;
+        rigorTimer += Time.deltaTime;
+        GameInfo.ScrollSpeed -= bgInitialSpeed / rigorTime * Time.deltaTime;        // 段々背景を止める
+
+        // 硬直アニメーションを過ごしたなら
+        if (rigorTimer >  rigorTime)
+        {
+            // Timerのリセットは他の関数内行う
+            isAtkReady = true;
+            moveSpeed = playerInitalSpeed;
+            GameInfo.ScrollSpeed = bgInitialSpeed;        // 背景を動かす
+        }
+    }
+    //------------------------------------------
+    // 概要：無敵状態中の情報処理(フレームごとに行う)
+    // 戻り値：なし
+    // 引数：なし
+    //------------------------------------------
     private void UpdateInvincibleStatus()
     {
         invincibleTimer += Time.deltaTime;
 
-        // 硬直アニメーションを過ごしたなら
-        if (invincibleTimer < rigorTime)
+        isAtkReady = true;
+
+        // 無敵時間を過ごしたなら
+        if (invincibleTimer >= beAtkedInvincibleTime)
         {
-            GameInfo.ScrollSpeed -= initialSpeed / rigorTime * Time.deltaTime;        // 段々背景を止める
+            currentPlayerStatus = PlayerStatus.normal;
+            GetComponent<SpriteRenderer>().enabled = true;
+            invincibleTimer = 0.0f;
+            rigorTimer = 0;
         }
         else
         {
-            GameInfo.ScrollSpeed = initialSpeed;        // 背景を動かす
-
-            // 無敵時間を過ごしたなら
-            if (invincibleTimer >= beAtkedInvincibleTime)
+            // プレイヤーのSpriteを点滅させる
+            blinkTimer += Time.deltaTime;
+            if (blinkTimer < blinkCycleTime)
             {
-                currentPlayerStatus = PlayerStatus.normal;
-                GetComponent<SpriteRenderer>().enabled = true;
-                invincibleTimer = 0.0f;
+                GetComponent<SpriteRenderer>().enabled = false;
             }
             else
             {
-                // プレイヤーのSpriteを点滅させる
-                blinkTimer += Time.deltaTime;
-                if (blinkTimer < blinkCycleTime)
-                {
-                    GetComponent<SpriteRenderer>().enabled = false;
-                }
-                else
-                {
-                    GetComponent<SpriteRenderer>().enabled = true;
-                    blinkTimer = 0.0f;
-                }
+                GetComponent<SpriteRenderer>().enabled = true;
+                blinkTimer = 0.0f;
             }
         }
     }

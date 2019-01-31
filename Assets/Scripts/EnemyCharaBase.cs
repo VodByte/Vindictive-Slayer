@@ -201,6 +201,6 @@ public abstract class EnemyCharaBase : MonoBehaviour
     //--------------------------------------------------------
     private void OnDrawGizmos()
     {
-        Gizmos.DrawWireCube(sr.bounds.center, new Vector3(atkRange, 5.0f, 1.0f));
+        Gizmos.DrawWireCube(GetComponent<SpriteRenderer>().bounds.center, new Vector3(atkRange, 5.0f, 1.0f));
     }
 }

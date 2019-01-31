@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: fcdcafe2be64c094fb49995b0955ac93
+timeCreated: 1548935463
+licenseType: Free
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Operational Amplifier
+  fontNames:
+  - Operational Amplifier
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

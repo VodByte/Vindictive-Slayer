@@ -50,6 +50,7 @@ public class Bullet : MonoBehaviour
 				isUsed = true;
 				transform.rotation = Quaternion.Euler(0f, 0f, Random.Range(0.0f, 360.0f));
 				moveDir = -moveDir;
+                GetComponent<SpriteRenderer>().flipY = false;
 				moveSpeed *= 1.5f;
 			}
 		}

@@ -19,7 +19,8 @@ public class Enemy2 : EnemyCharaBase
     //------------------------------------------
     public GameObject club;     // 落ちる木棒
 
-    private int successInputCount = 0;
+    private int inputSuccessCount = 0;
+    private bool isDropClub = false;
 
     void Update()
     {
@@ -33,77 +34,53 @@ public class Enemy2 : EnemyCharaBase
     //------------------------------------------
     public override bool CheckPlayerInput(InputManager.AtkPattern atkPattern)
     {
-        bool isCounterAttack = false;
-
-        if (transform.position.x > GameInfo.PlayerInfo.pos.x && successInputCount < 3 && atkPattern == InputManager.AtkPattern.UP)
+        // isClubDrop
+        if (transform.position.x > GameInfo.PlayerInfo.pos.x && atkPattern == InputManager.AtkPattern.UP && inputSuccessCount < 3)
         {
-            ++successInputCount;
-            currentStatus = EnemyStatus.beAttacked;
-            SetBeAtkAni();
-
-            if (successInputCount == 2)
+            ++inputSuccessCount;
+            if (inputSuccessCount == 2)
             {
-                // 落ちる木棒を生成する
+                isDropClub = true;
+                ani.SetBool("isNoWeapon", true);
                 Instantiate(club, transform.position + Vector3.up * 2.0f, Quaternion.identity, Camera.main.transform);
             }
-         }
-        else if (
-                ((transform.position.x > GameInfo.PlayerInfo.pos.x) && successInputCount < 3 && atkPattern != InputManager.AtkPattern.UP) 
-                || (transform.position.x <= GameInfo.PlayerInfo.pos.x) && successInputCount < 3) 
-        {
-            isCounterAttack = true;
-        }
-        else if ((
-                transform.position.x > GameInfo.PlayerInfo.pos.x && successInputCount >= 3 && atkPattern != InputManager.AtkPattern.LEFT
-                )
-                || 
-                (transform.position.x <= GameInfo.PlayerInfo.pos.x && successInputCount >= 3 && atkPattern == InputManager.AtkPattern.LEFT
-                ))
-        {
-            SetDeadAni();
-            currentStatus = EnemyStatus.dead;
         }
 
-  //      // 先頭の二回攻撃は、↑じゃないと、反撃される
-  //      // いずれ反撃も攻撃も、した後敵が立ち去る
-  //      if (atkPattern == InputManager.AtkPattern.UP && successInputCount < 3)
-		//{
-		//	++successInputCount;
-		//	currentStatus = EnemyStatus.beAttacked;
-		//	SetBeAtkAni();
+        if (!isDropClub)
+        {
+            if (atkPattern == InputManager.AtkPattern.UP)
+            {
+                currentStatus = EnemyStatus.beAttacked;
+                SetBeAtkAni();
+            }
+            else
+            {
+                return true;
+            }
+        }
+        else
+        {
+            if (atkPattern != InputManager.AtkPattern.LEFT)
+            {
+                --iHp;
+                if (iHp <= 0)
+                {
+                    SetDeadAni();
+                    currentStatus = EnemyStatus.dead;
+                }
+                else
+                {
+                    currentStatus = EnemyStatus.beAttacked;
+                }
+            }
+        }
 
-		//	if (successInputCount == 2)
-		//	{
-		//		// 落ちる木棒を生成する
-		//		Instantiate(club, transform.position + Vector3.up * 2.0f, Quaternion.identity, Camera.main.transform);
-		//	}
-		//}
-		//else if ( atkPattern != InputManager.AtkPattern.UP && atkPattern != InputManager.AtkPattern.LEFT && successInputCount < 3)
-		//{
-		//	isCounterAttack = true;
-		//}
-		//else if (atkPattern != InputManager.AtkPattern.LEFT && successInputCount >= 3)
-		//{
-		//	SetDeadAni();
-		//	currentStatus = EnemyStatus.dead;
-		//}
-
-        return isCounterAttack;
+        return false;
     }
 
     protected override void SetBeAtkAni()
     {
-        //Destroy(Instantiate(hitEffect, transform.position, Quaternion.identity) as GameObject, 1.2f);
-        transform.position = new Vector2(GameInfo.PlayerInfo.transform.position.x + GameInfo.PlayerInfo.atkRange, transform.position.y);
-
-        if (successInputCount < 2)
-        {
-            ani.SetTrigger("beAttacked");
-        }
-        else
-        {
-            ani.SetBool("isNoWeapon", true);
-        }
+        ani.SetTrigger("beAttacked");
     }
 
     //------------------------------------------
