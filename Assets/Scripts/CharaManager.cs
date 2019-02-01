@@ -18,6 +18,7 @@ public class CharaManager : MonoBehaviour
     //変数宣言(Public)
     //------------------------------------------
     public GameObject[] charaPrefabs;       // 各Prefabを格納用配列
+    public GameObject[] scorePrefabs;
 
     // ゲームにいるキャラクターの列挙型
     public enum CharaType
@@ -56,6 +57,8 @@ public class CharaManager : MonoBehaviour
             foreach (var i in clubAtkList)
             {
                 enemyList[i].SetKnockout();
+                GameInfo.total_Score += (int)enemyList[0].score;
+                Instantiate(scorePrefabs[0], enemyList[i].position, Quaternion.identity);
             }
         }
     }
@@ -76,14 +79,44 @@ public class CharaManager : MonoBehaviour
             }
 
             // 死んだら、画面の左側から1.0の距離を離したら、Delete
-            bool isDead = enemyList[i].CurrentStatus == EnemyCharaBase.EnemyStatus.dead;
-            if (enemyList[i].isOutScreen || isDead)
+            WipeOutEnemy(i);
+        }
+    }
+
+    /// <summary>
+    /// エネミの死亡処理：スコアの処理、リスト内排除
+    /// </summary>
+    private void WipeOutEnemy(int i)
+    {
+        bool isDead = enemyList[i].CurrentStatus == EnemyCharaBase.EnemyStatus.dead;
+        if (isDead)
+        {
+            if (!enemyList[i].isScoreUsed)
+            {
+                enemyList[i].isScoreUsed = true;
+                GameInfo.total_Score += (int)enemyList[i].score;
+
+                Vector2 spawnScorePos = enemyList[i].position + Vector2.up * 2.0f;
+                switch (enemyList[i].score)
+                {
+                    case EnemyCharaBase.ScoreType.one:
+                        Instantiate(scorePrefabs[0], spawnScorePos, Quaternion.identity);
+                        break;
+                    case EnemyCharaBase.ScoreType.two:
+                        Instantiate(scorePrefabs[1], spawnScorePos, Quaternion.identity);
+                        break;
+                    case EnemyCharaBase.ScoreType.four:
+                        Instantiate(scorePrefabs[2], spawnScorePos, Quaternion.identity);
+                        break;
+                }
+            }
+
+            if (enemyList[i].isOutScreen)
             {
                 Destroy(enemyList[i].gameObject, 2.0f);
                 enemyList.RemoveAt(i);
             }
         }
-
     }
 
     //---------------------------------------------------------------

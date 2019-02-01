@@ -18,6 +18,9 @@ public abstract class EnemyCharaBase : MonoBehaviour
     //------------------------------------------
     [HideInInspector]
     public Vector2 position;			// 敵の座標
+    public enum ScoreType { one = 100, two = 200, four = 400 };
+    public ScoreType score;
+    public bool isScoreUsed = false;
     public GameObject hitEffect;		// 当たられたエフェクトのPrefab
     public GameObject deadEffect;       // 死亡エフェクトのPrefab
     public GameObject atkEffect;        // 攻撃エフェクトのPrefab

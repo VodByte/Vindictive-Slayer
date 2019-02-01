@@ -10,7 +10,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class GameInfo : MonoBehaviour
 {
@@ -22,8 +21,9 @@ public class GameInfo : MonoBehaviour
     public static Vector2 ScreenViewRightEdgePos;   // 画面一番右端の位置情報
     public static PlayerManager PlayerInfo;         // プレイヤ情報
     public const  float floorPos = -3.77f;
-
-    public Text playerInfoText;     // 画面に表示する文字
+    [HideInInspector] public static int total_Score = 0;
+    public Transform scoreTextTransform;
+    [HideInInspector] public static Vector2 scoreTextPos;
 
     //-------------------------------------------------
     // 初期化処理
@@ -33,6 +33,7 @@ public class GameInfo : MonoBehaviour
         ScreenViewLeftEdgePos = Camera.main.ViewportToWorldPoint(new Vector3(0.0f, 0.5f, 0.0f));
         ScreenViewRightEdgePos = Camera.main.ViewportToWorldPoint(new Vector3(1.0f, 0.5f, 0.0f));
         PlayerInfo = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>();
+        scoreTextPos = scoreTextTransform.position;
     }
 
     //-------------------------------------------------
@@ -40,7 +41,6 @@ public class GameInfo : MonoBehaviour
     //-------------------------------------------------
     private void Update()
     {
-        // プレイヤのHPを表示する
-        playerInfoText.text = "Player HP:" + PlayerInfo.iHp.ToString();
+
     }
 }

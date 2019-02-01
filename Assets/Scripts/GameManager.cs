@@ -11,6 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -21,6 +22,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] Transform mark;
     [SerializeField] int[] types;
     public GameObject pauseMenu;
+    public Text scoreBoard;
+
+    [Header("Game Over")]
+    public GameObject GameOverMask;
+    public float maskMoveSpeed = 1.0f;
+    public Text GameOverText;
 
     //-------------------------------------------------
     // 初期化処理
@@ -42,6 +49,15 @@ public class GameManager : MonoBehaviour
     //-------------------------------------------------
     private void Update()
     {
+        // プレイヤのScoreを表示する
+        scoreBoard.text = "Score:" + GameInfo.total_Score;
+
+        // Game Over
+        if (GameInfo.PlayerInfo.iHp <= 0)
+        {
+            Vector2.MoveTowards(GameOverMask.transform.position, Vector2.zero, maskMoveSpeed * Time.deltaTime);
+        }
+
 #if Debug_On
         // R を押したら、Reset
         if (Input.GetKeyDown(KeyCode.R))

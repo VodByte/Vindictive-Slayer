@@ -87,6 +87,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   position: {x: 0, y: 0}
+  score: 200
   hitEffect: {fileID: 0}
   deadEffect: {fileID: 0}
   atkEffect: {fileID: 1727701383412072, guid: 419ede1fe64f946a38f643e298d40186, type: 2}
