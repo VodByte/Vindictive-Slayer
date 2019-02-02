@@ -25,9 +25,15 @@ public class GameManager : MonoBehaviour
     public Text scoreBoard;
 
     [Header("Game Over")]
+    public GameObject GameOverMenu;
     public GameObject GameOverMask;
     public float maskMoveSpeed = 1.0f;
-    public Text GameOverText;
+    public Transform GameOverText_UP;
+    public Transform GameOverText_DOWN;
+    public float TextMoveSpeed = 1.0f;
+    public SpriteRenderer blackScreen;
+    public float endAplha = 0.5f;
+    public float blackFadeTime = 2.0f;
 
     //-------------------------------------------------
     // 初期化処理
@@ -55,7 +61,23 @@ public class GameManager : MonoBehaviour
         // Game Over
         if (GameInfo.PlayerInfo.iHp <= 0)
         {
-            Vector2.MoveTowards(GameOverMask.transform.position, Vector2.zero, maskMoveSpeed * Time.deltaTime);
+            // Light Black Screen
+            if (blackScreen.color.a < endAplha)
+            {
+                Color prevColor = blackScreen.color;
+                blackScreen.color = new Color(prevColor.r, prevColor.g, prevColor.b, prevColor.a + endAplha / blackFadeTime * Time.deltaTime);
+            }
+            else
+            {
+                GameOverMenu.SetActive(true);
+
+                // Move Mask
+                GameOverMask.transform.position = Vector2.Lerp(GameOverMask.transform.position, Vector2.zero, maskMoveSpeed * Time.deltaTime);
+
+                // Move Text
+                GameOverText_UP.localPosition = Vector2.Lerp(GameOverText_UP.localPosition, Vector2.zero, TextMoveSpeed * Time.deltaTime);
+                GameOverText_DOWN.localPosition = Vector2.Lerp(GameOverText_DOWN.localPosition, Vector2.zero, TextMoveSpeed * Time.deltaTime);
+            }
         }
 
 #if Debug_On

@@ -35,7 +35,6 @@ public class GameInfo : MonoBehaviour
         PlayerInfo = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>();
         scoreTextPos = scoreTextTransform.position;
     }
-
     //-------------------------------------------------
     // 更新処理(フレームごとに行う)
     //-------------------------------------------------
