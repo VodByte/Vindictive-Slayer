@@ -12,7 +12,7 @@ public class GameClear : MonoBehaviour
     public Transform heroStopPos;
     public float heroSpeed = 5.0f;
     public Text scoreBoard;
-    public float scoreCountTime = 2.0f;
+    public float scoreCountGap = 2.0f;
     public float typeWordSpeed = 0.2f;
     [TextArea]
     public string sentence;
@@ -42,15 +42,15 @@ public class GameClear : MonoBehaviour
     {
         do 
         {
-            countScore += 1;
-            scoreBoard.text = "SCORE: " + countScore;
-            yield return new WaitForSeconds(scoreCountTime);
-        } while (countScore == GameInfo_StaticClass.total_Score);
+            countScore += 20;
+            scoreBoard.text = "         Score: " + countScore;
+            yield return new WaitForSeconds(scoreCountGap);
+        } while (countScore <= GameInfo_StaticClass.total_Score);
         GetComponent<AudioSource>().Stop();
         yield return new WaitForSeconds(2.0f);
-        scoreBoard.text = "SCORE: " + countScore + "\n" + "Game Time:" 
-            + (int)GameInfo_StaticClass.stageTime / 60 + "Mins"
-            + (int)GameInfo_StaticClass.stageTime % 60 + "Seconds";
+        scoreBoard.text = "         Score: " + countScore + "\n" + "Stage Time: " 
+            + (int)GameInfo_StaticClass.stageTime / 60 + "mins"
+            + (int)GameInfo_StaticClass.stageTime % 60 + "seconds";
 
         StartCoroutine(TypeWords());
     }

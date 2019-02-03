@@ -9,7 +9,7 @@ public class Bullet : MonoBehaviour
     public ContactFilter2D contactFilter2D;
 
     // Private
-    new Collider2D collider;
+    new Collider2D collider = new Collider2D();
     AudioSource beHitSE;
     [SerializeField]
     float moveSpeed = 20.0f;

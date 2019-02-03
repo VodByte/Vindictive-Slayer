@@ -404,7 +404,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 'SCORE:'
+  m_Text: "         Score: \nStage Time: "
 --- !u!222 &1154842568
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -653,7 +653,7 @@ MonoBehaviour:
   heroStopPos: {fileID: 55394252}
   heroSpeed: 0.2
   scoreBoard: {fileID: 1154842567}
-  scoreCountTime: 2
+  scoreCountGap: 0.001
   typeWordSpeed: 0.05
   sentence: 'Thanks for your playing
 
