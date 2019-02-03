@@ -1,15 +1,13 @@
 fileFormatVersion: 2
-guid: 99032c694f1ebaf4e84231b8181f562e
-timeCreated: 1544795417
+guid: 873e8d0362c674e49a7d6d586574933d
+timeCreated: 1549167545
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: adventurer_Run_0
-    21300002: adventurer_Run_1
-    21300004: adventurer_Run_2
-    21300006: adventurer_Run_3
-    21300008: adventurer_Run_4
-    21300010: adventurer_Run_5
+    21300000: Player_Idle_0
+    21300002: Player_Idle_1
+    21300004: Player_Idle_2
+    21300006: Player_Idle_3
   externalObjects: {}
   serializedVersion: 4
   mipmaps:
@@ -86,7 +84,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: adventurer_Run_0
+      name: Player_Idle_0
       rect:
         serializedVersion: 2
         x: 0
@@ -100,7 +98,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: adventurer_Run_1
+      name: Player_Idle_1
       rect:
         serializedVersion: 2
         x: 50
@@ -114,7 +112,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: adventurer_Run_2
+      name: Player_Idle_2
       rect:
         serializedVersion: 2
         x: 100
@@ -128,38 +126,10 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: adventurer_Run_3
+      name: Player_Idle_3
       rect:
         serializedVersion: 2
         x: 150
-        y: 0
-        width: 50
-        height: 37
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: adventurer_Run_4
-      rect:
-        serializedVersion: 2
-        x: 200
-        y: 0
-        width: 50
-        height: 37
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: adventurer_Run_5
-      rect:
-        serializedVersion: 2
-        x: 250
         y: 0
         width: 50
         height: 37

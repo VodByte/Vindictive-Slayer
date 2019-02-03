@@ -38,15 +38,17 @@ public class GameManager : MonoBehaviour
     public float endAplha = 0.5f;
     public float blackFadeTime = 2.0f;
 
-    private const float StageLength = 20.0f;       // ステージの長さ(秒)
+    private const float StageLength = 160.0f;       // ステージの長さ(秒)
     private TimeStamp headTimeStamp;
+    private AudioSource battleBgm;
+    
     public static bool isStageClear = false;
     //-------------------------------------------------
     // 初期化処理
     //-------------------------------------------------
     private void Awake()
     {
-        // 敵を配置する。このやり方は雑なので、後は別の方法でやる
+        battleBgm = gameObject.GetComponent<AudioSource>();
         cm = GetComponent<CharaManager>();
         cm.CreateChara(new Vector2(leftCreatePoint.position.x, -2.632f), CharaManager.CharaType.Player);
     }
@@ -91,6 +93,9 @@ public class GameManager : MonoBehaviour
             {
                 Color prevColor = blackScreen.color;
                 blackScreen.color = new Color(prevColor.r, prevColor.g, prevColor.b, prevColor.a + endAplha / blackFadeTime * Time.deltaTime);
+
+                // Fade out Bgm
+                battleBgm.volume -= 0.5f * Time.deltaTime;
             }
             else
             {

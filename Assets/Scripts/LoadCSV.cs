@@ -10,11 +10,13 @@ public struct TimeStamp
 
 public class LoadCSV : MonoBehaviour
 {
-    public static Queue<TimeStamp> timeStampQueue = new Queue<TimeStamp>();
+    public static Queue<TimeStamp> timeStampQueue;
 
     private void Awake()
     {
-		TextAsset csvFile = Resources.Load<TextAsset>("TimeStamp");
+        timeStampQueue = new Queue<TimeStamp>();
+
+        TextAsset csvFile = Resources.Load<TextAsset>("TimeStamp");
 
         string[] data = csvFile.text.Split(new char[] { '\n' });
 

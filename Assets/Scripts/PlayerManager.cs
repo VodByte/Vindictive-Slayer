@@ -17,7 +17,7 @@ public class PlayerManager : MonoBehaviour
     //------------------------------------------
     //変数宣言(public)
     //------------------------------------------
-    public const int maxHp = 5;         // 改了这里记得改HpBar.cs
+    public const int maxHp = 8;         // 改了这里记得改HpBar.cs
     [HideInInspector]public int iHp;                         // プレイヤーのHP
     [Range(0.0f, 10.0f)]
     public float moveSpeed = 0.2f;
@@ -48,7 +48,6 @@ public class PlayerManager : MonoBehaviour
     // 変数宣言(private)
     //------------------------------------------
     private Animator ani;      // Player GameObjectにアタッチしたAnimator
-    private float bgInitialSpeed = GameInfo.ScrollSpeed;      // 背景の初期移動速度
     private float rigorTime;        // 当たられたら硬直時間(今はadventurer_BeAtkedアニメーションの長さで設定する)
     private float invincibleTimer = 0.0f;       // 無敵時間を計るタイマー
     private float blinkTimer = 0.0f;    // Sprite点滅を計るタイマー
@@ -73,7 +72,7 @@ public class PlayerManager : MonoBehaviour
             if (ani.runtimeAnimatorController.animationClips[i].name == "Player_Hurt")
             {
                 AnimationClip ac = ani.runtimeAnimatorController.animationClips[i];
-                rigorTime = ac.length / 0.3f;     // Animator内の"Player_Hurt"アニメーション長さを取得する
+                rigorTime = ac.length / 0.7f;     // Animator内の"Player_Hurt"アニメーション長さを取得する
             }
         }
         audios = GetComponents<AudioSource>();
@@ -153,18 +152,20 @@ public class PlayerManager : MonoBehaviour
     //------------------------------------------
     private void UpdateRigorStatus()
     {
-        isAtkReady = false;
-        moveSpeed = 0.0f;
-        rigorTimer += Time.deltaTime;
-        GameInfo.ScrollSpeed -= bgInitialSpeed / rigorTime * Time.deltaTime;        // 段々背景を止める
-
         // 硬直アニメーションを過ごしたなら
         if (rigorTimer >  rigorTime)
         {
             // Timerのリセットは他の関数内行う
             isAtkReady = true;
             moveSpeed = playerInitalSpeed;
-            GameInfo.ScrollSpeed = bgInitialSpeed;        // 背景を動かす
+            GameInfo.ScrollSpeed = GameInfo.initalScrollSpeed;        // 背景を動かす
+        }
+        else
+        {
+            isAtkReady = false;
+            moveSpeed = 0.0f;
+            rigorTimer += Time.deltaTime;
+            GameInfo.ScrollSpeed -= GameInfo.initalScrollSpeed / rigorTime * Time.deltaTime;        // 段々背景を止める
         }
     }
     //------------------------------------------

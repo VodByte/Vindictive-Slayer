@@ -25,7 +25,8 @@ GameObject:
   - component: {fileID: 82773009351863690}
   - component: {fileID: 82873569921049932}
   - component: {fileID: 82109994882117802}
-  m_Layer: 0
+  - component: {fileID: 61679154034695846}
+  m_Layer: 9
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -41,7 +42,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4984881034683230}
   - component: {fileID: 58445004535942160}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: collider_Back
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -57,7 +58,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4176392922810502}
   - component: {fileID: 58955435066729190}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: collider_Front
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -84,7 +85,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1488562357675068}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.0032115, y: -3.107307, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4176392922810502}
@@ -135,6 +136,31 @@ CircleCollider2D:
   m_Offset: {x: 0.76, y: 0.2}
   serializedVersion: 2
   m_Radius: 0.7
+--- !u!61 &61679154034695846
+BoxCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1488562357675068}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.25443986, y: -0.06557715}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 3.3333333, y: 2.4666667}
+    newSize: {x: 0.32, y: 0.64}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.36, y: 1.8004014}
+  m_EdgeRadius: 0
 --- !u!82 &82109994882117802
 AudioSource:
   m_ObjectHideFlags: 1

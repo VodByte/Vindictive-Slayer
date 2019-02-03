@@ -1,75 +1,87 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
     public GameObject hitEffect;
+    public ContactFilter2D contactFilter2D;
 
+    // Private
+    new Collider2D collider;
+    AudioSource beHitSE;
     [SerializeField]
     float moveSpeed = 20.0f;
     [SerializeField]
     int atkPoint = 1;
     [SerializeField]
-    float atkRange = 0.2f;
-    [SerializeField]
     float reactionRange = 1.0f;
-    Vector3 moveDir;
-    bool isUsed = false;
-    Vector3 startPos;
+    bool isInvail = false;
+    Vector2 moveDir;
 
     private void Start()
     {
-        startPos = transform.position;
-
-		var dir = (Vector3)GameInfo.PlayerInfo.pos + Vector3.up * 0.5f - transform.position;
+        beHitSE = GetComponent<AudioSource>();
+        collider = GetComponent<CircleCollider2D>();
+        moveDir = -transform.up * moveSpeed * Time.deltaTime;
+         var dir = ((Vector3)GameInfo.PlayerInfo.pos + Vector3.up * 0.5f - transform.position).normalized;
 		var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-		transform.rotation = Quaternion.AngleAxis(angle + 90.0f, Vector3.forward);
+		transform.localRotation = Quaternion.AngleAxis(angle + 90.0f, Vector3.forward);
     }
 
     private void Update()
     {
-		if (transform.position.x < GameInfo.ScreenViewLeftEdgePos.x - 2.0f || transform.position.x > GameInfo.ScreenViewRightEdgePos.x + 2.0f)
-		{
-			Destroy (gameObject);
-			return;
-		}
-
-        if (!isUsed)
+        if (!isInvail)
         {
-			if (startPos.x <= GameInfo.PlayerInfo.pos.x)
-			{
-				moveDir = -transform.right * moveSpeed * Time.deltaTime;
-			}
-			else
-			{
-				moveDir = transform.right * moveSpeed * Time.deltaTime;
-			}
+            if (CheckTouchPlayer())
+            {
+                GameInfo.PlayerInfo.BeAtked(atkPoint);
+                GameInfo.PlayerInfo.PlayAudio(PlayerManager.AudioIndex.playerBeHitted);
+                Destroy(gameObject);
+                return;
+            }
 
-			if (Vector3.Distance(transform.position, GameInfo.PlayerInfo.pos) < atkRange)
-			{
-				isUsed = true;
-				GameInfo.PlayerInfo.BeAtked(atkPoint);
-				GameInfo.PlayerInfo.PlayAudio(PlayerManager.AudioIndex.playerBeHitted);
-			}
+            // If be hitted
+            bool isOverlayX = Mathf.Abs(transform.position.x - GameInfo.PlayerInfo.pos.x) < reactionRange;
+            bool isOverlayY = Mathf.Abs(transform.position.y - GameInfo.PlayerInfo.pos.y) < reactionRange;
+            if (isOverlayX && isOverlayY && InputManager.currentAtkPattern != InputManager.AtkPattern.NONE && InputManager.currentAtkPattern != InputManager.AtkPattern.LEFT)
+            {
 
-			if (Vector3.Distance(transform.position, GameInfo.PlayerInfo.pos) < reactionRange && InputManager.currentAtkPattern != InputManager.AtkPattern.NONE && InputManager.currentAtkPattern != InputManager.AtkPattern.LEFT)
-			{
-				isUsed = true;
+                SpriteRenderer sr =  GetComponent<SpriteRenderer>();
+                Color color = sr.color;
+                sr.color = new Color(color.r / 2.0f, color.g / 2.0f, color.b / 2.0f);
+                isInvail = true;
                 Destroy(Instantiate(hitEffect, transform.position, Quaternion.identity) as GameObject, 2.0f);
-                transform.rotation = Quaternion.Euler(0f, 0f, Random.Range(0.0f, 360.0f));
-				moveDir = -moveDir;
-                GetComponent<SpriteRenderer>().flipY = false;
-				moveSpeed *= 3.5f;
-			}
-		}
+                moveDir = transform.right * moveSpeed * Time.deltaTime;
+                beHitSE.Play();
+                transform.localRotation = Quaternion.AngleAxis(UnityEngine.Random.Range(0.0f, 360.0f) + 90.0f, Vector3.forward);
+                moveSpeed *= 1.2f;
+            }
+        }
 
-		transform.Translate(moveDir);
-	}
+        // Out Screen
+        if (transform.position.x < GameInfo.ScreenViewLeftEdgePos.x - 2.0f || transform.position.x > GameInfo.ScreenViewRightEdgePos.x + 2.0f)
+        {
+            Destroy(gameObject);
+            return;
+        }
+       
+        transform.Translate(moveDir);
+    }
 
-    private void OnDrawGizmos()
+    private bool CheckTouchPlayer()
     {
-        Gizmos.DrawWireCube(GetComponent<SpriteRenderer>().bounds.center, new Vector3(reactionRange, 1.0f, 1.0f));
-        Gizmos.DrawWireCube(GetComponent<SpriteRenderer>().bounds.center, new Vector3(atkRange, 1.0f, 1.0f));
+        Collider2D[] touchCollider = new Collider2D[2];
+        collider.OverlapCollider(contactFilter2D, touchCollider);
+        foreach (var i in touchCollider)
+        {
+            if (i != null && i.gameObject.name == "Player(Clone)" && GameInfo.PlayerInfo.currentPlayerStatus != PlayerManager.PlayerStatus.invincible)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

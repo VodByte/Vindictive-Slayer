@@ -20,6 +20,7 @@ public class CharaManager : MonoBehaviour
     public GameObject hitEffect;		// 当たられたエフェクトのPrefab
     public GameObject[] charaPrefabs;       // 各Prefabを格納用配列
     public GameObject[] scorePrefabs;
+    public ContactFilter2D contactFilter2D;
 
     // ゲームにいるキャラクターの列挙型
     public enum CharaType
@@ -37,6 +38,12 @@ public class CharaManager : MonoBehaviour
     //------------------------------------------
     private List<EnemyCharaBase> enemyList = new List<EnemyCharaBase> { };  // ゲーム内いる敵を全部格納用List
     private List<int> clubAtkList = new List<int> { };
+
+    private void Awake()
+    {
+        enemyList = new List<EnemyCharaBase> { };
+        clubAtkList = new List<int> { };
+    }
 
     //-------------------------------------------------------------
     // 更新
@@ -59,6 +66,11 @@ public class CharaManager : MonoBehaviour
             {
                 enemyList[i].SetKnockout();
                 GameInfo.total_Score += (int)enemyList[0].score;
+
+                if (transform.GetComponentInChildren<Club>() != null)
+                {
+                    transform.GetComponentInChildren<Club>().gameObject.GetComponent<AudioSource>().Play();
+                }
                 Instantiate(scorePrefabs[0], enemyList[i].position, Quaternion.identity);
             }
         }
@@ -133,7 +145,7 @@ public class CharaManager : MonoBehaviour
                 i.Attack();
 
                 // Enemy1 本体はダメージを与えない、発射したブレットはする
-                if (i.GetComponent<Enemy1>() == null || GameInfo.PlayerInfo.currentPlayerStatus == PlayerManager.PlayerStatus.invincible)
+                if (i.gameObject.name != "Enemy1(Clone)")
                 {
                     GameInfo.PlayerInfo.BeAtked(i.atkPoint);
                     GameInfo.PlayerInfo.PlayAudio(PlayerManager.AudioIndex.playerBeHitted);
@@ -165,14 +177,8 @@ public class CharaManager : MonoBehaviour
             }
 
             Collider2D[] enemies = new Collider2D[8];   // 衝突している敵を格納配列
-            ContactFilter2D filter2D = new ContactFilter2D
-            {
-                layerMask = LayerMask.NameToLayer("Enemy"),
-                useTriggers = true
-            };
             bool isAllNull = true;  // この配列は空っぽなのか
-
-            checkCollider.OverlapCollider(filter2D, enemies);
+            checkCollider.OverlapCollider(contactFilter2D, enemies);
             for (int i = 0; i < 8; i++)
             {
                 if (enemies[i] != null)

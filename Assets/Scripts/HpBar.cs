@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class HpBar : MonoBehaviour
 {
-    const int maxHp = 5;
+    const int maxHp = 8;
     public float gap = 0.5f;
     public GameObject heart;
     private GameObject[] hearts = new GameObject[maxHp];
