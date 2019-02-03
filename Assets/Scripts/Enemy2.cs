@@ -1,6 +1,6 @@
 ﻿//---------------------------------------------------------------------
 // Enemy2.cs
-// 赤鬼の機能設定(未完成)
+// 赤鬼の機能設定
 // 作成者　18CU0116 左国力
 // 作成日　2018-12-10
 // 更新履歴
@@ -52,6 +52,7 @@ public class Enemy2 : EnemyCharaBase
             {
                 currentStatus = EnemyStatus.beAttacked;
                 SetBeAtkAni();
+                GameInfo.PlayerInfo.PlayAudio(PlayerManager.AudioIndex.swordHitEnemy01);
             }
             else
             {
@@ -72,6 +73,7 @@ public class Enemy2 : EnemyCharaBase
                 {
                     currentStatus = EnemyStatus.beAttacked;
                 }
+                GameInfo.PlayerInfo.PlayAudio(PlayerManager.AudioIndex.swordHitEnemy01);
             }
         }
 

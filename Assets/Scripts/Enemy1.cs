@@ -46,6 +46,7 @@ public class Enemy1 : EnemyCharaBase
             --iHp;
             currentStatus = EnemyStatus.dead;
             SetDeadAni();
+            GameInfo.PlayerInfo.PlayAudio(PlayerManager.AudioIndex.swordHitEnemy01);
         }
 
         return false;

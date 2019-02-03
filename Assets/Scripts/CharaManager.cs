@@ -17,6 +17,7 @@ public class CharaManager : MonoBehaviour
     //------------------------------------------
     //変数宣言(Public)
     //------------------------------------------
+    public GameObject hitEffect;		// 当たられたエフェクトのPrefab
     public GameObject[] charaPrefabs;       // 各Prefabを格納用配列
     public GameObject[] scorePrefabs;
 
@@ -88,6 +89,13 @@ public class CharaManager : MonoBehaviour
     /// </summary>
     private void WipeOutEnemy(int i)
     {
+		if (enemyList[i].isOutScreen)
+		{
+			Destroy(enemyList[i].gameObject, 1.0f);
+			enemyList.RemoveAt(i);
+			return;
+		}
+
         bool isDead = enemyList[i].CurrentStatus == EnemyCharaBase.EnemyStatus.dead;
         if (isDead)
         {
@@ -110,12 +118,6 @@ public class CharaManager : MonoBehaviour
                         break;
                 }
             }
-
-            if (enemyList[i].isOutScreen)
-            {
-                Destroy(enemyList[i].gameObject, 2.0f);
-                enemyList.RemoveAt(i);
-            }
         }
     }
 
@@ -131,7 +133,7 @@ public class CharaManager : MonoBehaviour
                 i.Attack();
 
                 // Enemy1 本体はダメージを与えない、発射したブレットはする
-                if (i.GetComponent<Enemy1>() == null)
+                if (i.GetComponent<Enemy1>() == null || GameInfo.PlayerInfo.currentPlayerStatus == PlayerManager.PlayerStatus.invincible)
                 {
                     GameInfo.PlayerInfo.BeAtked(i.atkPoint);
                     GameInfo.PlayerInfo.PlayAudio(PlayerManager.AudioIndex.playerBeHitted);
@@ -179,6 +181,8 @@ public class CharaManager : MonoBehaviour
                     if (enemyInfo.CurrentStatus != EnemyCharaBase.EnemyStatus.dead) // 死亡した敵に攻撃しない
                     {
                         isAllNull = false;
+                        // 当たったエフェクトを生成する（生成したから1.2秒の後でDelete）
+                        Destroy(Instantiate(hitEffect, enemyInfo.position + Vector2.up * enemyInfo.gameObject.GetComponent<SpriteRenderer>().bounds.size.y * 0.25f, Quaternion.identity) as GameObject, 2.0f);
                         // 反撃
                         bool isCounterAttack = enemyInfo.CheckPlayerInput(InputManager.currentAtkPattern);
                         if (isCounterAttack)
@@ -186,7 +190,6 @@ public class CharaManager : MonoBehaviour
                             enemyInfo.CounterAttack();
                             GameInfo.PlayerInfo.BeAtked(enemyInfo.atkPoint);
                         }
-                        GameInfo.PlayerInfo.PlayAudio(PlayerManager.AudioIndex.swordHitEnemy01);
                     }
                 }
             }
@@ -194,14 +197,7 @@ public class CharaManager : MonoBehaviour
             GetComponent<InputManager>().ResetAtkInfo();
 
             // 素振りで攻撃できる敵がいないなら
-            if (isAllNull)
-            {
-                GameInfo.PlayerInfo.PlayAudio(PlayerManager.AudioIndex.swordGesture);
-            }
-            else
-            {
-                GameInfo.PlayerInfo.PlayAudio(PlayerManager.AudioIndex.swordHitEnemy01);
-            }
+            if (isAllNull) GameInfo.PlayerInfo.PlayAudio(PlayerManager.AudioIndex.swordGesture);
         }
     }
 

@@ -17,7 +17,8 @@ public class PlayerManager : MonoBehaviour
     //------------------------------------------
     //変数宣言(public)
     //------------------------------------------
-    public int iHp;                         // プレイヤーのHP
+    public const int maxHp = 5;         // 改了这里记得改HpBar.cs
+    [HideInInspector]public int iHp;                         // プレイヤーのHP
     [Range(0.0f, 10.0f)]
     public float moveSpeed = 0.2f;
     public float atkRange;                  // プレイヤーの攻撃範囲
@@ -63,6 +64,7 @@ public class PlayerManager : MonoBehaviour
     //-------------------------------------------------
     private void Start()
     {
+        iHp = maxHp;
         playerInitalSpeed = moveSpeed;
         ani = GetComponent<Animator>();
 
@@ -130,6 +132,10 @@ public class PlayerManager : MonoBehaviour
                 break;
         }
         transform.Translate(Vector2.right * moveSpeed * dir * Time.deltaTime);
+
+        // not aviable get out of screen
+        if (GameManager.isStageClear) return;
+
         if (transform.position.x <= GameInfo.ScreenViewLeftEdgePos.x)
         {
             transform.position = new Vector2(GameInfo.ScreenViewLeftEdgePos.x, transform.position.y);
@@ -169,8 +175,6 @@ public class PlayerManager : MonoBehaviour
     private void UpdateInvincibleStatus()
     {
         invincibleTimer += Time.deltaTime;
-
-        isAtkReady = true;
 
         // 無敵時間を過ごしたなら
         if (invincibleTimer >= beAtkedInvincibleTime)

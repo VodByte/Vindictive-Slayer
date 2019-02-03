@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    public GameObject hitEffect;
+
     [SerializeField]
     float moveSpeed = 20.0f;
     [SerializeField]
@@ -27,6 +29,12 @@ public class Bullet : MonoBehaviour
 
     private void Update()
     {
+		if (transform.position.x < GameInfo.ScreenViewLeftEdgePos.x - 2.0f || transform.position.x > GameInfo.ScreenViewRightEdgePos.x + 2.0f)
+		{
+			Destroy (gameObject);
+			return;
+		}
+
         if (!isUsed)
         {
 			if (startPos.x <= GameInfo.PlayerInfo.pos.x)
@@ -48,7 +56,8 @@ public class Bullet : MonoBehaviour
 			if (Vector3.Distance(transform.position, GameInfo.PlayerInfo.pos) < reactionRange && InputManager.currentAtkPattern != InputManager.AtkPattern.NONE && InputManager.currentAtkPattern != InputManager.AtkPattern.LEFT)
 			{
 				isUsed = true;
-				transform.rotation = Quaternion.Euler(0f, 0f, Random.Range(0.0f, 360.0f));
+                Destroy(Instantiate(hitEffect, transform.position, Quaternion.identity) as GameObject, 2.0f);
+                transform.rotation = Quaternion.Euler(0f, 0f, Random.Range(0.0f, 360.0f));
 				moveDir = -moveDir;
                 GetComponent<SpriteRenderer>().flipY = false;
 				moveSpeed *= 3.5f;

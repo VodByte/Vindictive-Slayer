@@ -9,6 +9,7 @@ public class GameOverMenu : MonoBehaviour
     public float toggleTime = 1.0f;
     public float fadeInTime = 0.5f;
     private bool isReady = false;
+    private AudioSource audioSource;
 
     private enum MenuStatus
     {
@@ -27,6 +28,7 @@ public class GameOverMenu : MonoBehaviour
 
     private void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         GameObject child = transform.GetChild(0).gameObject;
         normalCol = child.GetComponent<SpriteRenderer>().color;
 
@@ -83,6 +85,7 @@ public class GameOverMenu : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Return))
         {
+            audioSource.Play();
             switch (currentMenu)
             {
                 case MenuStatus.Restart:

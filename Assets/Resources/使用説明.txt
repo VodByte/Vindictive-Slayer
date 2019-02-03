@@ -1,0 +1,13 @@
+最後の行目は0　0　0で設定のまま、編集しないこと
+
+time(Seconds)：	秒で数値を設定
+
+EnemyType　：　
+		0　餓鬼
+		１　天狗
+		２　赤鬼
+		３　Ghost
+
+createDir：
+		0　左
+		１　右

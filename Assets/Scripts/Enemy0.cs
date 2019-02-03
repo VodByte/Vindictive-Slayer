@@ -31,11 +31,17 @@ public class Enemy0 : EnemyCharaBase
         bool isCounterAttack = false;
 
 		// 入力したキーは ↑ ↓ → のいずれなら
-        if (atkPattern == InputManager.AtkPattern.DOWN)
+        if (atkPattern == InputManager.AtkPattern.DOWN || (atkPattern == InputManager.AtkPattern.LEFT && transform.position.x < GameInfo.PlayerInfo.pos.x))
         {
 			// 一撃で死亡
             SetDeadAni();
             currentStatus = EnemyStatus.dead;
+            GameInfo.PlayerInfo.PlayAudio(PlayerManager.AudioIndex.swordHitEnemy01);
+        }
+        else
+        {
+            GameInfo.PlayerInfo.PlayAudio(PlayerManager.AudioIndex.swordGesture);
+            ani.SetTrigger("Def");
         }
 
         return isCounterAttack;

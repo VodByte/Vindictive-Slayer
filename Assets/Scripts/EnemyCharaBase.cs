@@ -21,7 +21,6 @@ public abstract class EnemyCharaBase : MonoBehaviour
     public enum ScoreType { one = 100, two = 200, four = 400 };
     public ScoreType score;
     public bool isScoreUsed = false;
-    public GameObject hitEffect;		// 当たられたエフェクトのPrefab
     public GameObject deadEffect;       // 死亡エフェクトのPrefab
     public GameObject atkEffect;        // 攻撃エフェクトのPrefab
     public float moveSpeed;             // 右からくる速度(0.１に設定するのを推薦)
@@ -147,7 +146,7 @@ public abstract class EnemyCharaBase : MonoBehaviour
     //---------------------------------------------------------------
     internal virtual bool CheckOutScreen()
     {
-        return position.x < GameInfo.ScreenViewLeftEdgePos.x - 1.0f;
+		return (position.x < GameInfo.ScreenViewLeftEdgePos.x - 1.0f);
     }
 
     //---------------------------------------------------------------
@@ -171,10 +170,8 @@ public abstract class EnemyCharaBase : MonoBehaviour
     //------------------------------------------
     protected virtual void SetBeAtkAni()
     {
-		// 当たったエフェクトを生成する（生成したから1.2秒の後でDelete）
-		//Destroy(Instantiate(hitEffect, transform.position, Quaternion.identity, gameObject.transform) as GameObject, 1.2f);
-		// 敵が攻撃されたアニメーションを再生する
-		ani.SetTrigger("beAttacked");
+        // 敵が攻撃されたアニメーションを再生する
+        ani.SetTrigger("beAttacked");
 		// Knock back
 		transform.position = new Vector2(GameInfo.PlayerInfo.transform.position.x + GameInfo.PlayerInfo.atkRange, transform.position.y);
     }

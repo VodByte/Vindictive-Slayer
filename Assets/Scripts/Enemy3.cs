@@ -17,6 +17,7 @@ public class Enemy3 : EnemyCharaBase
             // 一撃で死亡
             SetDeadAni();
             currentStatus = EnemyStatus.dead;
+            GameInfo.PlayerInfo.PlayAudio(PlayerManager.AudioIndex.swordHitEnemy01);
         }
 
         return false;
@@ -31,8 +32,7 @@ public class Enemy3 : EnemyCharaBase
         atkTimer = 0.0f;
         ani.SetTrigger("attack");       // 攻撃あアニメーションを再生する
         moveSpeed = 0.0f;
-       GameObject effect = Instantiate(atkEffect, transform.position + Vector3.up * sr.bounds.size.y * 0.4f, Quaternion.identity, gameObject.transform) as GameObject;
-        Destroy(effect, effect.GetComponent<Animator>().runtimeAnimatorController.animationClips[0].length);
+        Instantiate(atkEffect, transform.position + Vector3.up * sr.bounds.size.y * 0.4f, Quaternion.identity);
         Destroy(gameObject, GetComponent<Animator>().runtimeAnimatorController.animationClips[0].length);
     }
 

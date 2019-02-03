@@ -70,6 +70,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62f77ae303043ca48bc33fe95ea07a5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hitEffect: {fileID: 1904670868997506, guid: 8743332c49b618b469364d76ee723e5d, type: 2}
   moveSpeed: 8
   atkPoint: 1
   atkRange: 0.33

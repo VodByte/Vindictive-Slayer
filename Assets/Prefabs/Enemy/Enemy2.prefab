@@ -88,7 +88,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   position: {x: 0, y: 0}
   score: 400
-  hitEffect: {fileID: 100000, guid: f06e78284f831ae469c74624ab5d513b, type: 2}
+  isScoreUsed: 0
   deadEffect: {fileID: 100004, guid: 7867af58a6ec48846ae807eb4022fbaa, type: 2}
   atkEffect: {fileID: 0}
   moveSpeed: 1.34

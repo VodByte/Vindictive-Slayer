@@ -4,12 +4,12 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
+	AudioSource audioSource;
     public float toggleTime = 1.0f;
-
     private enum MenuStatus
     {
         Start,
-        Option,
+        //Option,
         Quit,
     }
     MenuStatus currentMenu = MenuStatus.Start;
@@ -26,6 +26,7 @@ public class MainMenu : MonoBehaviour
 
     private void Start()
     {
+		audioSource = GetComponent<AudioSource>();
         GameObject child = transform.GetChild(0).gameObject;
         normalMenuCol = child.GetComponent<SpriteRenderer>().color;
         normalTextCol = child.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().color;
@@ -54,20 +55,22 @@ public class MainMenu : MonoBehaviour
         {
             prevMenu = currentMenu;
             ++currentMenu;
-            if ((int)currentMenu > 2) currentMenu = MenuStatus.Start;
+            //if ((int)currentMenu > 2) currentMenu = MenuStatus.Start;
+            if ((int)currentMenu > 1) currentMenu = MenuStatus.Start;
             ChangeColor();
         }
 
         if (Input.GetKeyDown(KeyCode.Return))
         {
+            audioSource.Play();
             switch (currentMenu)
             {
                 case MenuStatus.Start:
                     SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
                     break;
-                case MenuStatus.Option:
-                    Debug.Log("WIP");
-                    break;
+//                case MenuStatus.Option:
+//                    Debug.Log("WIP");
+//                    break;
                 case MenuStatus.Quit:
                     Debug.Log("Quit Game");
                     Application.Quit();
@@ -85,7 +88,8 @@ public class MainMenu : MonoBehaviour
         if (currentSelectCoroutin != null)
         {
             StopCoroutine(currentSelectCoroutin);
-            for (int i = 0; i < 3; i++)
+//            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 2; i++)
             {
                 if (i != (int)currentMenu)
                 {

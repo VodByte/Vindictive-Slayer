@@ -6,7 +6,7 @@ public class BackgroundSprite : MonoBehaviour
 {
     public float moveSpeed;
 
-    private void Start()
+    private void OnEnable()
     {
         moveSpeed *= Random.Range(1.0f, 1.5f);
         transform.position = new Vector3(transform.position.x, transform.position.y, 20.0f - moveSpeed);
