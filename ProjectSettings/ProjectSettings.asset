@@ -639,12 +639,14 @@ PlayerSettings:
     daydream:
       daydreamIconForeground: {fileID: 0}
       daydreamIconBackground: {fileID: 0}
-  cloudServicesEnabled: {}
+  cloudServicesEnabled:
+    Collab: 1
+    UNet: 1
   facebookSdkVersion: 7.9.4
   apiCompatibilityLevel: 2
-  cloudProjectId: 6f0f57cd-e5bd-40f9-b588-8eca59d3bb74
-  projectName: MosterSamurai
-  organizationId: sakrk
+  cloudProjectId: cbb875c5-dc13-4136-9c9c-d8221aaffa1b
+  projectName: Vindictive-Slayer
+  organizationId: sakokuriki
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
   disableOldInputManagerSupport: 0

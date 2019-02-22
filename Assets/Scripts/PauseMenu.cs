@@ -36,6 +36,7 @@ public class PauseMenu : MonoBehaviour
     private void OnEnable()
     {
         Time.timeScale = 0.0f;
+        InputManager.currentAtkPattern = InputManager.AtkPattern.NONE;
     }
 
     private void OnDisable()

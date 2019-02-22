@@ -48,9 +48,7 @@ public class GameClear : MonoBehaviour
         } while (countScore <= GameInfo_StaticClass.total_Score);
         GetComponent<AudioSource>().Stop();
         yield return new WaitForSeconds(2.0f);
-        scoreBoard.text = "         Score: " + countScore + "\n" + "Stage Time: " 
-            + (int)GameInfo_StaticClass.stageTime / 60 + "mins"
-            + (int)GameInfo_StaticClass.stageTime % 60 + "seconds";
+        scoreBoard.text = "         Score: " + countScore + "\n" + "Stage Time: ";
 
         StartCoroutine(TypeWords());
     }
@@ -68,6 +66,8 @@ public class GameClear : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Return))
             {
+                InputManager.currentAtkPattern = InputManager.AtkPattern.NONE;
+                InputManager.currentMovePattern = InputManager.MovePattern.NONE;
                 SceneManager.LoadScene(0);
             }
             yield return null;

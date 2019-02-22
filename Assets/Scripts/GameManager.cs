@@ -38,7 +38,7 @@ public class GameManager : MonoBehaviour
     public float endAplha = 0.5f;
     public float blackFadeTime = 2.0f;
 
-    private const float StageLength = 10.0f;       // ステージの長さ(秒)
+    private const float StageLength = 160.0f;       // ステージの長さ(秒)
     private TimeStamp headTimeStamp;
     private AudioSource battleBgm;
     
@@ -123,6 +123,8 @@ public class GameManager : MonoBehaviour
             else
             {
                 GetComponent<InputManager>().enabled = false;
+                InputManager.currentAtkPattern = InputManager.AtkPattern.NONE;
+                InputManager.currentMovePattern = InputManager.MovePattern.NONE;
                 GameInfo.PlayerInfo.gameObject.transform.Translate(Vector2.right * playerInSpeed * Time.deltaTime);
 
                 // fade out bgm
